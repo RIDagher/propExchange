@@ -1,0 +1,36 @@
+2025/3/19 David Demers
+Completed:
+-Decided work split for project
+-Added all work to do on trello
+-Watched laravel tutorials
+-Setup cpanel database connection
+Todo:
+-Create project models
+-Create project controllers
+-Create project routes
+-Create project middleware
+
+
+2025/3/19 Louis Chartier
+Completed:
+-Decided work split for project
+-Added all work to do on trello
+-Watched laravel tutorials
+-Setup cpanel database connection
+Todo:
+-Create front-end landing page
+-Create front-end login page
+-Create front-end register page
+
+
+2025/3/19 Rima Dagher
+Completed:
+-Decided work split for project
+-Added all work to do on trello
+-Watched laravel tutorials
+-Setup cpanel database connection
+Todo:
+-Create front-end search properties page
+-Create front-end search properties by location page
+-Create front-end search users and agents page
+
