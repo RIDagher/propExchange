@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('city');
             $table->string('province');
             $table->string('postalCode');
+            $table->decimal('latitude', 9, 6);
+            $table->decimal('longitude', 9, 6);
             $table->unsignedBigInteger('agentId');
             $table->boolean('isSold')->default(false);
             $table->enum('propertyType', ['House', 'Condo', 'Cottage', 'Multiplex']);
