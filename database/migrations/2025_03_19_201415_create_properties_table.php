@@ -31,7 +31,7 @@ return new class extends Migration
             $table->decimal('squareFootage', 10, 2);
             $table->integer('yearBuilt');
             $table->boolean('isGarage')->default(false);
-            $table->timestamps();
+            $table->timestamp('createdAt')->useCurrent();
 
             $table->foreign('agentId')->references('userId')->on('users')->onDelete('cascade');
         });

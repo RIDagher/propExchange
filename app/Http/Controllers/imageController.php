@@ -7,20 +7,14 @@ use Illuminate\Http\Request;
 
 class PropertyImageController extends Controller
 {
-    /**
-     * Get all images for a specific property.
-     */
-    public function index($propertyId)
-    {
+    // Get all images from propertyId
+    public function index($propertyId) {
         $images = PropertyImage::where('propertyId', $propertyId)->get();
         return response()->json($images);
     }
 
-    /**
-     * Get a specific image by ID.
-     */
-    public function show($imageId)
-    {
+    // Get image by id
+    public function show($imageId) {
         $image = PropertyImage::find($imageId);
 
         if ($image) {
@@ -30,11 +24,8 @@ class PropertyImageController extends Controller
         return response()->json(['message' => 'Image not found'], 404);
     }
 
-    /**
-     * Upload a new image for a property.
-     */
-    public function store(Request $request, $propertyId)
-    {
+    // Upload another image
+    public function store(Request $request, $propertyId) {
         $validatedData = $request->validate([
             'imagePath' => 'required|string',
             'mainImage' => 'sometimes|boolean',
@@ -47,11 +38,8 @@ class PropertyImageController extends Controller
         return response()->json($image, 201);
     }
 
-    /**
-     * Delete an image.
-     */
-    public function destroy($imageId)
-    {
+    // Delete an image
+    public function destroy($imageId) {
         $image = PropertyImage::find($imageId);
 
         if (!$image) {

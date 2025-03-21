@@ -7,20 +7,14 @@ use Illuminate\Http\Request;
 
 class PropertyController extends Controller
 {
-    /**
-     * Get all properties.
-     */
-    public function index()
-    {
+    // Get all properties
+    public function index() {
         $properties = Property::all();
         return response()->json($properties);
     }
 
-    /**
-     * Get a specific property by ID.
-     */
-    public function show($propertyId)
-    {
+    // Get property by id
+    public function show($propertyId) {
         $property = Property::find($propertyId);
 
         if ($property) {
@@ -30,11 +24,8 @@ class PropertyController extends Controller
         return response()->json(['message' => 'Property not found'], 404);
     }
 
-    /**
-     * Create a new property.
-     */
-    public function store(Request $request)
-    {
+    // Create a property
+    public function store(Request $request) {
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -60,11 +51,8 @@ class PropertyController extends Controller
         return response()->json($property, 201);
     }
 
-    /**
-     * Update a property.
-     */
-    public function update(Request $request, $propertyId)
-    {
+    // Update a property
+    public function update(Request $request, $propertyId) {
         $property = Property::find($propertyId);
 
         if (!$property) {
@@ -96,11 +84,8 @@ class PropertyController extends Controller
         return response()->json($property);
     }
 
-    /**
-     * Delete a property.
-     */
-    public function destroy($propertyId)
-    {
+    // Delete a property
+    public function destroy($propertyId) {
         $property = Property::find($propertyId);
 
         if (!$property) {
