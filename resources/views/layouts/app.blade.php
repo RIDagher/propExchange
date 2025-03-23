@@ -12,7 +12,7 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">PropExchange</a>
                 <div id="navbar">
@@ -27,7 +27,7 @@
                             <a class="nav-link" href="#">Find a Realtor</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/signin') }}">Sign In</a>
+                            <a class="nav-link" href="{{ url('/login') }}">Sign In</a>
                         </li>
                     </ul>
                 </div>
@@ -39,7 +39,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center p-3">
+    <footer class="footer text-white text-center p-3">
         <p>&copy; PropExchange | All Rights Reserved</p>
     </footer>
 </body>
