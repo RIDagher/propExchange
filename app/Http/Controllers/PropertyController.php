@@ -5,178 +5,180 @@ namespace App\Http\Controllers;
 use App\Models\Property;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class PropertyController extends Controller {
-    // create, update and delete methods
-    // Create a property
-    public function store(Request $request) {
-        try {    
-            $validatedData = $request->validate([
-                'title' => 'required|string|regex:/^[a-zA-Z0-9! -]{1,255}$/',
-                'description' => 'required|string|regex:/^[a-zA-Z0-9.!@ -]+$/',
-                'price' => 'required|numeric|regex:/^\d{1,10}([.,]\d{2})?$/',
-                'address' => 'required|string|max:255|regex:/^\d{1,5}\s[A-Za-z\s\-.]+$/',
-                'city' => 'required|string|max:100|regex:/^[A-Za-z\s\-.]+$/',
-                'province' => 'required|string|max:100|regex:/^[A-Za-z\s\-.]+$/',
-                'postalCode' => 'required|string|max:7|regex:/^[A-Z]\d[A-Z] \d[A-Z]\d$/i',
-                'latitude' => 'required|numeric',
-                'longitude' => 'required|numeric',
-                'ownerId' => 'required|exists:users,userId',
-                'agentId' => 'required|exists:users,userId',
-                'isSold' => 'boolean',
-                'propertyType' => 'required|in:House,Condo,Cottage,Multiplex',
-                'floors' => 'required|integer',
-                'bedrooms' => 'required|integer',
-                'bathrooms' => 'required|integer',
-                'squareFootage' => 'required|numeric',
-                'yearBuilt' => 'required|integer',
-                'isGarage' => 'boolean',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $error) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $error->errors(),
-            ], 422);
-        }
-    
-        try { 
-            $property = Property::create($validatedData);
-            return response()->json($property, 201);
 
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
+    // Show property creation form (GET)
+    public function create()
+    {
+        return view('properties.create', [
+            'agents' => User::where('role', 'agent')->get()
+        ]);
+    }
+
+    // Create a property
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|regex:/^[a-zA-Z0-9! -]{1,255}$/',
+            'description' => 'required|string|regex:/^[a-zA-Z0-9.!@ -]+$/',
+            'price' => 'required|numeric|regex:/^\d{1,10}([.,]\d{2})?$/',
+            'address' => 'required|string|max:255|regex:/^\d{1,5}\s[A-Za-z\s\-.]+$/',
+            'city' => 'required|string|max:100|regex:/^[A-Za-z\s\-.]+$/',
+            'province' => 'required|string|max:100|regex:/^[A-Za-z\s\-.]+$/',
+            'postalCode' => 'required|string|max:7|regex:/^[A-Z]\d[A-Z] \d[A-Z]\d$/i',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'agentId' => 'required|exists:users,userId',
+            'propertyType' => 'required|in:House,Condo,Cottage,Multiplex',
+            'floors' => 'required|integer',
+            'bedrooms' => 'required|integer',
+            'bathrooms' => 'required|integer',
+            'squareFootage' => 'required|numeric',
+            'yearBuilt' => 'required|integer',
+            'isGarage' => 'boolean',
+        ]);
+
+        // Set ownerId to current user
+        $validatedData['ownerId'] = Auth::id();
+        $validatedData['isSold'] = false;
+
+        try {
+            Property::create($validatedData);
+            return redirect()->route('properties.my')
+                ->with('success', 'Property created successfully!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to create property')->withInput();
         }
     }
 
+    // Show property edit form
+    public function edit($propertyId)
+    {
+        $property = Property::findOrFail($propertyId);
+        if (Auth::id() !== $property->ownerId) {
+            return back()->with('error', 'Unauthorized');
+        }
+
+        return view('properties.edit', [
+            'property' => $property,
+            'agents' => User::where('role', 'agent')->get()
+        ]);
+    }
+
     // Update a property
-    public function update(Request $request, $propertyId) {
-        try {
-            $property = Property::find($propertyId);
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
+    public function update(Request $request, $propertyId)
+    {
+        $property = Property::findOrFail($propertyId);
+        $user = Auth::user();
+
+        if ($user->userId !== $property->ownerId) {
+            return back()->with('error', 'You can only edit your own properties');
         }
 
-        if (!$property) {
-            return response()->json(['message' => 'Property not found'], 404);
-        }
 
-        try {
-            $validatedData = $request->validate([
-                'title' => 'sometimes|string|regex:/^[a-zA-Z0-9! -]{1,255}$/',
-                'description' => 'sometimes|string|regex:/^[a-zA-Z0-9.!@ -]+$/',
-                'price' => 'sometimes|numeric|regex:/^\d{1,10}([.,]\d{2})?$/',
-                'address' => 'sometimes|string|max:255|regex:/^\d{1,5}\s[A-Za-z\s\-.]+$/',
-                'city' => 'sometimes|string|max:100|regex:/^[A-Za-z\s\-.]+$/',
-                'province' => 'sometimes|string|max:100|regex:/^[A-Za-z\s\-.]+$/',
-                'postalCode' => 'sometimes|string|max:7|regex:/^[A-Z]\d[A-Z] \d[A-Z]\d$/i',
-                'latitude' => 'sometimes|numeric',
-                'longitude' => 'sometimes|numeric',
-                'ownerId' => 'sometimes|exists:users,userId',
-                'agentId' => 'sometimes|exists:users,userId',
-                'isSold' => 'sometimes|boolean',
-                'propertyType' => 'sometimes|in:House,Condo,Cottage,Multiplex',
-                'floors' => 'sometimes|integer',
-                'bedrooms' => 'sometimes|integer',
-                'bathrooms' => 'sometimes|integer',
-                'squareFootage' => 'sometimes|numeric',
-                'yearBuilt' => 'sometimes|integer',
-                'isGarage' => 'sometimes|boolean',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $error) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $error->errors(),
-            ], 422);
-        }
+        $validatedData = $request->validate([
+            'title' => 'sometimes|string|regex:/^[a-zA-Z0-9! -]{1,255}$/',
+            'description' => 'sometimes|string|regex:/^[a-zA-Z0-9.!@ -]+$/',
+            'price' => 'sometimes|numeric|regex:/^\d{1,10}([.,]\d{2})?$/',
+            'address' => 'sometimes|string|max:255|regex:/^\d{1,5}\s[A-Za-z\s\-.]+$/',
+            'city' => 'sometimes|string|max:100|regex:/^[A-Za-z\s\-.]+$/',
+            'province' => 'sometimes|string|max:100|regex:/^[A-Za-z\s\-.]+$/',
+            'postalCode' => 'sometimes|string|max:7|regex:/^[A-Z]\d[A-Z] \d[A-Z]\d$/i',
+            'latitude' => 'sometimes|numeric',
+            'longitude' => 'sometimes|numeric',
+            'agentId' => 'sometimes|exists:users,userId',
+            'isSold' => 'sometimes|boolean',
+            'propertyType' => 'sometimes|in:House,Condo,Cottage,Multiplex',
+            'floors' => 'sometimes|integer',
+            'bedrooms' => 'sometimes|integer',
+            'bathrooms' => 'sometimes|integer',
+            'squareFootage' => 'sometimes|numeric',
+            'yearBuilt' => 'sometimes|integer',
+            'isGarage' => 'sometimes|boolean',
+        ]);
 
         try {
             $property->update($validatedData);
-            return response()->json($property);
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
+            return redirect()->route('properties.show', $propertyId)
+                ->with('success', 'Property updated successfully!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update property')->withInput();
         }
     }
 
     // Delete a property
-    public function destroy($propertyId) {
-        try {
-            $property = Property::find($propertyId);
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
-        }
+    public function destroy($propertyId)
+    {
+        $property = Property::findOrFail($propertyId);
 
-        if (!$property) {
-            return response()->json(['message' => 'Property not found'], 404);
+        if (Auth::id() !== $property->ownerId) {
+            abort(403);
         }
 
         try {
             $property->delete();
-            return response()->json(['message' => 'Property deleted']);
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
+            return redirect()->route('properties.my')
+                ->with('success', 'Property deleted successfully!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete property');
         }
     }
 
 
-    // Get methods
-    // Get Property by owner id
-    public function getByOwner($ownerId) {
-        try {
-            $validUser = User::find($ownerId);
-            if (!$validUser) {
-                return response()->json(['message' => 'Owner not found'], 404);
-            } else if ($validUser->role !== 'client') {
-                return response()->json(['message' => 'User is not a client'], 400);
-            }
-
-            $properties = Property::where('ownerId', $ownerId)->get();
-            return response()->json($properties);
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
-        }
+    // Show all properties
+    public function index()
+    {
+        return view('properties.index', [
+            'properties' => Property::latest()->paginate(10)
+        ]);
     }
 
-    // Get property by agent id
-    public function getByAgent($agentId) {
-        try {
-            $validUser = User::find($agentId);
-            if (!$validUser) {
-                return response()->json(['message' => 'Agent not found'], 404);
-            } else if ($validUser->role !== 'agent') {
-                return response()->json(['message' => 'User is not a agent'], 400);
-            }
-
-            $properties = Property::where('agentId', $agentId)->get();
-            return response()->json($properties);
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
-        }
+    // Show single property
+    public function show($propertyId)
+    {
+        return view('properties.show', [
+            'property' => Property::findOrFail($propertyId)
+        ]);
     }
 
-    // Get property by id
-    public function show($propertyId) {
-        try {
-            $property = Property::find($propertyId);
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
-        }
-
-        if (!$property) {
-            return response()->json(['message' => 'Property not found'], 404);
-        }
-
-        return response()->json($property);
+    // Show current user's properties
+    public function myProperties()
+    {
+        $userId = Auth::id();
+        return view('properties.my', [
+            'properties' => Property::where('ownerId', $userId)->latest()->get()
+        ]);
     }
 
-    // Get all properties
-    public function index() {
-        try {
-            $properties = Property::all();
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
+    // Show properties by user
+    public function userProperties($userId)
+    {
+        // Only allow viewing own properties unless admin
+        if (Auth::id() != $userId) {
+            abort(403);
         }
 
-        return response()->json($properties);
+        return view('properties.user', [
+            'properties' => Property::where('ownerId', $userId)->latest()->get(),
+            'user' => User::findOrFail($userId)
+        ]);
+    }
+
+    // Search properties
+    public function search(Request $request)
+    {
+        $query = Property::query();
+
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%'.$request->search.'%')
+                  ->orWhere('description', 'like', '%'.$request->search.'%');
+        }
+
+        return view('properties.search', [
+            'properties' => $query->paginate(10),
+            'searchTerm' => $request->search ?? ''
+        ]);
     }
 }

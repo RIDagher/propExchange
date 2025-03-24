@@ -46,23 +46,6 @@
   </form>
 
   <!-- Search Results -->
-  <div class="row mt-4">
-    @if(count($properties) > 0)
-    @foreach ($properties as $property)
-    <div class="col-md-4 mb-4">
-      <div class="card">
-        <img src="{{ $property['image'] }}" class="card-img-top" alt="Property">
-        <div class="card-body">
-          <h5 class="card-title">${{ number_format($property['price']) }}</h5>
-          <p class="card-text">{{ $property['type'] }}, {{ $property['city'] }}</p>
-          <a href="#" class="btn btn-primary">View Details</a>
-        </div>
-      </div>
-    </div>
-    @endforeach
-    @else
-    <p class="text-center mt-4">No properties found.</p>
-    @endif
-  </div>
+  
 </div>
 @endsection
