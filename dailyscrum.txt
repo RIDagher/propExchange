@@ -101,3 +101,28 @@ Completed:
 Todo:
 -Integrate search properties with backend
 -Create front-end search agents page
+
+
+2025/3/23 David Demers
+Completed:
+-User model login
+-User login with authorization
+-User model finalzied
+-Property model finalzied
+-Added all error handling and input validation
+-Tested both models data validation in postman
+Todo:
+-Create propertyImage image folder
+-Rename image paths before adding to database
+-Integrate views into controller
+
+2025/3/23 Louis Chartier
+Completed:
+-Finalized html & css for landingpage
+-Added search function to landingpage
+-Finalized login page css and html
+-Finalized register page css and html
+Todo:
+-Finalize front-end landing page
+-Finalize front-end register & login page
+-Implement login with google and facebook

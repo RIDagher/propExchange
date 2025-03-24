@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PropertyController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,17 +15,23 @@ Route::get('/csrf-token', function () {
     ]);
 });
 
-// Register a new user
+// User routes
+
+// Public routes
 Route::post('/register', [UserController::class, 'register']);
+Route::post('/login', [UserController::class, 'login']);
 
-// Update an existing user
+// Protected routes
+Route::post('/logout', [UserController::class, 'logout']);
 Route::put('/users/{userId}', [UserController::class, 'update']);
-
-// Delete a user
 Route::delete('/users/{userId}', [UserController::class, 'delete']);
-
-// Get a user by id
 Route::get('/users/{userId}', [UserController::class, 'show']);
-
-// Get a user by username
 Route::get('/users/username/{username}', [UserController::class, 'getByUsername']);
+
+
+// Property routes
+Route::post('/properties', [PropertyController::class, 'store']);
+Route::put('/properties/{propertyId}', [PropertyController::class, 'update']);
+Route::delete('/properties/{propertyId}', [PropertyController::class, 'destroy']);
+Route::get('/properties/{propertyId}', [PropertyController::class, 'show']);
+Route::get('/properties ', [PropertyController::class, 'index']);

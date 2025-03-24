@@ -4,13 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
+    public function up(): void {
+
         Schema::create('properties', function (Blueprint $table) {
             $table->id('propertyId');
             $table->string('title');
@@ -22,9 +21,10 @@ return new class extends Migration
             $table->string('postalCode');
             $table->decimal('latitude', 9, 6);
             $table->decimal('longitude', 9, 6);
-            $table->unsignedBigInteger('agentId');
-            $table->boolean('isSold')->default(false);
-            $table->enum('propertyType', ['House', 'Condo', 'Cottage', 'Multiplex']);
+            $table->unsignedBigInteger('ownerId')->index();
+            $table->unsignedBigInteger('agentId')->index();
+            $table->boolean('isSold')->default(false)->index();
+            $table->enum('propertyType', ['House', 'Condo', 'Cottage', 'Multiplex'])->index();
             $table->integer('floors');
             $table->integer('bedrooms');
             $table->integer('bathrooms');
@@ -33,6 +33,7 @@ return new class extends Migration
             $table->boolean('isGarage')->default(false);
             $table->timestamp('createdAt')->useCurrent();
 
+            $table->foreign('ownerId')->references('userId')->on('users')->onDelete('cascade');
             $table->foreign('agentId')->references('userId')->on('users')->onDelete('cascade');
         });
     }
@@ -40,8 +41,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
+    public function down(): void {
         Schema::dropIfExists('properties');
     }
 };
