@@ -21,5 +21,17 @@
             </form>
         </div>
     </div>
+
+    <div id="login-modal" class="modal">
+        <div class="login-modal-content">
+            <p id="success"></p>
+            <button id="close">OK</button>
+        </div>
+    </div>
+    @section('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/loginUser.js') }}"></script>
+    
+    @endsection
     
 @endsection
