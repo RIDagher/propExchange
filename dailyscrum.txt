@@ -35,3 +35,94 @@ Todo:
 -Create front-end search users and agents page
 
 
+2025/3/20 David Demers
+Completed:
+-Basic version of all models
+-basic version of users and propertyImage controllers
+-completed final version of migrations
+Todo:
+-Finalize project models
+-Finalize project controllers
+-Create project routes
+-Create project middleware
+
+
+2025/3/20 Louis Chartier
+Completed:
+-Started landing page css and html
+-Started login page css and html
+-Started register page css and html
+Todo:
+-Finalize front-end landing page
+-Finalize front-end login page
+-Finalize front-end register page
+
+
+2025/3/20 Rima Dagher
+Completed:
+-Learning cpanel upload
+-Learning blade
+-Starting search page html and css
+Todo:
+-Create front-end search properties page
+-Create front-end search properties by location page
+-Create front-end search users and agents page
+
+
+2025/3/21 David Demers
+Completed:
+-User model completed with password hashing
+-User routes completed
+-User controller fully tested with postman
+Todo:
+-User login controller
+-Finalize project models
+-Finalize project controllers
+-Finalize project routes
+-Create project middleware
+
+
+2025/3/21 Louis Chartier
+Completed:
+-Almost finished landing page css and html
+-Finished login page css and html
+-Almost finished register page css and html
+Todo:
+-Finalize front-end landing page
+-Finalize front-end register page
+-Implement login with google and facebook
+
+
+2025/3/21 Rima Dagher
+Completed:
+-Integrated google maps
+-created search properties page
+-created search map page
+Todo:
+-Integrate search properties with backend
+-Create front-end search agents page
+
+
+2025/3/23 David Demers
+Completed:
+-User model login
+-User login with authorization
+-User model finalzied
+-Property model finalzied
+-Added all error handling and input validation
+-Tested both models data validation in postman
+Todo:
+-Create propertyImage image folder
+-Rename image paths before adding to database
+-Integrate views into controller
+
+2025/3/23 Louis Chartier
+Completed:
+-Finalized html & css for landingpage
+-Added search function to landingpage
+-Finalized login page css and html
+-Finalized register page css and html
+Todo:
+-Finalize front-end landing page
+-Finalize front-end register & login page
+-Implement login with google and facebook

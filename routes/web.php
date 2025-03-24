@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route
+use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -8,15 +10,47 @@ Route::get('/', function () {
 
 
 Route::get('/search-properties', function () {
-    $properties = [
-        ["type" => "House", "price" => 750000, "city" => "Toronto", "image" => "https://via.placeholder.com/300", "lat" => "43.6532", "lng" => "-79.3832"],
-        ["type" => "Condo", "price" => 650000, "city" => "Vancouver", "image" => "https://via.placeholder.com/300", "lat" => "49.2827", "lng" => "-123.1207"],
-        ["type" => "Cottage", "price" => 450000, "city" => "Quebec City", "image" => "https://via.placeholder.com/300", "lat" => "46.8139", "lng" => "-71.2082"],
-    ];
-
-    return view('search-properties', compact('properties'));
+    return view('search-properties');
 })->name('search.properties');
 
 Route::get('/search-map', function () {
     return view('search-map');
 })->name('search.map');
+
+Route::get('/login', function() {
+    return view('login');
+});
+
+Route::get('/register', function() {
+    return view('register');
+});
+
+Route::get('/search-suggestions', [PropertyController::class, 'getSuggestions']);
+
+// Get CSRF token to pass for other postman request
+Route::get('/csrf-token', function () {
+    return response()->json([
+        'csrf_token' => csrf_token(),
+    ]);
+});
+
+// User routes
+
+// Public routes
+Route::post('/register', [UserController::class, 'register']);
+Route::post('/login', [UserController::class, 'login']);
+
+// Protected routes
+Route::post('/logout', [UserController::class, 'logout']);
+Route::put('/users/{userId}', [UserController::class, 'update']);
+Route::delete('/users/{userId}', [UserController::class, 'delete']);
+Route::get('/users/{userId}', [UserController::class, 'show']);
+Route::get('/users/username/{username}', [UserController::class, 'getByUsername']);
+
+
+// Property routes
+Route::post('/properties', [PropertyController::class, 'store']);
+Route::put('/properties/{propertyId}', [PropertyController::class, 'update']);
+Route::delete('/properties/{propertyId}', [PropertyController::class, 'destroy']);
+Route::get('/properties/{propertyId}', [PropertyController::class, 'show']);
+Route::get('/properties ', [PropertyController::class, 'index']);

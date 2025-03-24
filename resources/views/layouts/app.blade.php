@@ -1,54 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@yield('title', 'PropExchange')</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Landing Page')</title>
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
-
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 </head>
-
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">PropExchange</a>
+                <div id="navbar">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/') }}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Find a Property</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Find a Realtor</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/login') }}">Sign In</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-  <!-- Top Red Navbar -->
-  <nav class="navbar top-nav">
-    <div class="container d-flex justify-content-between">
-      <a class="navbar-brand text-white" href="/">PropExchange</a>
-      <div>
-        <a href="#" class="mx-2">Sign In</a>
-        <a href="#" class="mx-2">Register</a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main White Navigation Bar -->
-  <nav class="navbar navbar-expand-lg main-nav">
     <div class="container">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/search-properties">Find a Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/search-agent">Find a REALTOR</a></li>
-          <li class="nav-item"><a class="nav-link" href="/search-location">Map</a></li>
-        </ul>
-      </div>
+        @yield('content')
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <div class="container mt-4">
-    @yield('content') <!-- Child views  -->
-  </div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Footer -->
+    <footer class="footer text-white text-center p-3">
+        <p>&copy; PropExchange | All Rights Reserved</p>
+    </footer>
 </body>
-
 </html>
