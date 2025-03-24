@@ -69,7 +69,7 @@ Todo:
 -Create front-end search users and agents page
 
 
-2025/3/19 David Demers
+2025/3/21 David Demers
 Completed:
 -User model completed with password hashing
 -User routes completed

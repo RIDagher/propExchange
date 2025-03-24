@@ -8,6 +8,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/search-properties', function () {
+    return view('search-properties');
+})->name('search.properties');
+
+Route::get('/search-map', function () {
+    return view('search-map');
+})->name('search.map');
+
 Route::get('/login', function() {
     return view('login');
 });
