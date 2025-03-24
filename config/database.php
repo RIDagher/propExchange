@@ -31,23 +31,23 @@ return [
 
     'connections' => [
 
-        //  'sqlite' => [
-        //      'driver' => 'sqlite',
-        //      'url' => env('DB_URL'),
-        //      'database' => env('DB_DATABASE', database_path('database.sqlite')),
-        //      'prefix' => '',
-        //      'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-        //      'busy_timeout' => null,
-        //      'journal_mode' => null,
-        //      'synchronous' => null,
-        //  ],
+        /*'sqlite' => [
+            'driver' => 'sqlite',
+            'url' => env('DB_URL'),
+            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'prefix' => '',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+            'busy_timeout' => null,
+            'journal_mode' => null,
+            'synchronous' => null,
+        ],*/
 
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'propExchange'),
+            'database' => env('DB_DATABASE', 'propexchange'),
             'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', '233719@Aa'),
             'unix_socket' => env('DB_SOCKET', ''),
