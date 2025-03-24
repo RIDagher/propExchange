@@ -1,12 +1,22 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/login', function() {
+    return view('login');
+});
+
+Route::get('/register', function() {
+    return view('register');
+});
+
+Route::get('/search-suggestions', [PropertyController::class, 'getSuggestions']);
 
 // Get CSRF token to pass for other postman request
 Route::get('/csrf-token', function () {
