@@ -44,8 +44,6 @@
       </div>
     </div>
   </form>
-
-  <!-- Search Results -->
   
 </div>
 @endsection

@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById("register-form");
-    const modal = document.getElementById("modal");
-    const modalContent = document.getElementById("modal-content");
-    const closeModal = document.getElementById("close");
 
     form.addEventListener("submit", function (event){
         event.preventDefault();
@@ -22,26 +19,33 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
-        registerUser(userData);
+        form.submit();
     });
 
     function validateForm(data) {
         let errors = [];
 
-        if (data.username.length < 3) {
-            errors.push({ field: "username", message: "Username must be at least 3 characters." });
+        const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
+        if (!usernameRegex.test(data.username)) {
+            errors.push({ field: "username", message: "The username may only contain letters, numbers, and underscores, and cannot end with a dot or contain consecutive dots." });
         }
 
-        if (!validateEmail(data.email)) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(data.email)) {
             errors.push({ field: "email", message: "Invalid email format." });
         }
 
-        if (data.password.length < 6) {
-            errors.push({ field: "password", message: "Password must be at least 6 characters." });
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+        if (!passwordRegex.test(data.password)) {
+            errors.push({ field: "password", message: "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number." });
         }
 
         if (data.password !== data.rePassword) {
             errors.push({ field: "re-password", message: "Passwords do not match." });
+        }
+        const validRoles = ['agent', 'client'];
+        if (!validRoles.includes(data.role)) {
+            errors.push({ field: "role", message: "The role must be either 'agent' or 'client'." });
         }
 
         return errors;
@@ -66,44 +70,4 @@ document.addEventListener("DOMContentLoaded", function() {
             inputField.parentNode.appendChild(errorMsg);
         });
     }
-    
-    function registerUser(userData) {
-        $.ajax({
-            url: "/register",
-            method: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(userData),
-            success: function(response) {
-                if (response.success) {
-                    showModal("Your account has been created successfully!");
-                    form.reset();
-                } else {
-                    showModal(response.message || "Registration failed. Please try again.");
-                }
-            },
-            error: function(xhr, status, error) {
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    showModal(xhr.responseJSON.message);
-                } else {
-                    showModal("Something went wrong. Please try again.");
-                }
-            }
-        });
-    }
-
-    function showModal(message) {
-        document.getElementById("success").innerText = message;
-        modal.style.display = "block";
-
-        closeModal.addEventListener("click", function () {
-            modal.style.display = "none";
-        });
-
-        window.addEventListener("click", function (event) {
-            if (event.target === modal) {
-                modal.style.display = "none";
-            }
-        });
-    }
-
 });
