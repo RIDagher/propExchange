@@ -14,12 +14,7 @@
             </div>
         </div>
     </section>
-    @section('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
     
-    @endsection
-
     <!-- Info -->
         <section class="info-section py-5 bg-light">
             <div class="container">
@@ -88,5 +83,21 @@
                 </div>
             </div>
         </div>
-     </section>  
+     </section>
+@endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var flashMessageContainer = document.getElementById('flashMessageContainer');
+            var flashMessage = flashMessageContainer ? flashMessageContainer.getAttribute('data-flash-message') : "";
+            if (flashMessage) {
+                var flashToastEl = document.getElementById('flashToast');
+                if (flashToastEl) {
+                    var toast = new bootstrap.Toast(flashToastEl);
+                    toast.show();
+                }
+            }
+        });
+    </script>
 @endsection
