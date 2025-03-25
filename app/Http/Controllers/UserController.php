@@ -5,77 +5,78 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     // Register a new user
     public function register(Request $request) {
-        try {
-            $validatedData = $request->validate([
-                'username' => [
-                    'required',
-                    'string',
-                    'regex:/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/',
-                    'unique:users,username'],
-                'email' => 'required|email|unique:users,email',
-                'password' => [
-                    'required',
-                    'string',
-                    'regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/',
-                    'confirmed'],
-                'role' => 'required|in:agent,client', 
-            ], 
-            [
-                'username.regex' => 'The username may only contain letters, numbers, and underscores.',
-                'email.regex' => 'The email is in an invalid format.',
-                'password.regex' => 'The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter and one number.',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $error) {
-            return redirect()->back()
-                             ->withErrors($error->errors())
-                             ->withInput();
-        }
-    
-        try {
-            $user = User::create($validatedData);
-            Auth::login($user);
-            $request->session()->regenerate();
+        $validator = Validator::make($request->all(), [
+            'username' => [
+                'required',
+                'string',
+                'regex:/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/',
+                'unique:users,username'
+            ],
+            'email' => 'required|email|unique:users,email',
+            'password' => [
+                'required',
+                'string',
+                'regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/',
+                'confirmed'
+            ],
+            'role' => 'required|in:agent,client', 
+        ], [
+            'username.regex' => 'The username may only contain letters, numbers, and underscores.',
+            'password.regex' => 'The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter and one number.',
+        ]);
 
-            return redirect()->route('login')->with('success', 'Registration successful! Please log in.');
-        } catch (\Exception $error) {
+        if ($validator->fails()) {
             return redirect()->back()
-                ->with('error', 'An unexpected error occurred: ' . $error->getMessage())
+                ->withErrors($validator)
                 ->withInput();
         }
+
+        try {
+            $user = User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role
+            ]);
+
+            Auth::login($user);
+            return redirect()->route('welcome')->with('success', 'Registration successful!');
+
+        } catch (\Exception $error) {
+            return redirect()->back()
+                ->with($error, 'An unexpected error occurred during registration.')
+                ->withInput();
+        }        
     }
 
 
     // Login a user
     public function login(Request $request) {
-        $validatedData = $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
         
-        if (Auth::attempt($validatedData)) {
+        if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-    
-            $sessionCookie = config('session.cookie');
-            $sessionId = $request->session()->getId();
-
             return redirect()->intended('/')->with('success', 'Login successful!');
-
         }
 
-        return redirect()->back()
-                     ->withErrors(['email' => 'Invalid credentials'])
-                     ->withInput();
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 
 
     // Logout a user
-    public function logout(Request $request)
-    {
+    public function logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -84,95 +85,98 @@ class UserController extends Controller
 
 
     // Update a user
-    public function update(Request $request, $userId) {
-        try {
-            $user = User::find($userId);
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
-        }
+    public function update(Request $request) {
+        $user = Auth::user();
 
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'username' => [
                 'sometimes',
                 'string',
                 'regex:/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/',
-                'unique:users,username,' . $userId . ',userId'],
-            'email' => 'sometimes|email|unique:users,email,' . $userId . ',userId',
+                'unique:users,username,' . $user->userId . ',userId'
+            ],
+            'email' => 'sometimes|email|unique:users,email,' . $user->userId . ',userId',
+            'current_password' => 'required_with:password|current_password',
             'password' => [
                 'sometimes',
                 'string',
                 'regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/',
+                'confirmed'
             ],
-            'role' => 'sometimes|in:agent,client',
-        ],
-        [
+        ], [
             'username.regex' => 'The username may only contain letters, numbers, and underscores.',
-            'email.regex' => 'The email is in an invalid format.',
             'password.regex' => 'The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter and one number.',
+            'current_password.current_password' => 'The current password is incorrect.'
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         try {
-            $user->update($validatedData);
-            return response()->json($user);
+            $updateData = [];
+            
+            if ($request->filled('username')) {
+                $updateData['username'] = $request->username;
+            }
+            
+            if ($request->filled('email')) {
+                $updateData['email'] = $request->email;
+            }
+            
+            if ($request->filled('password')) {
+                $updateData['password'] = Hash::make($request->password);
+            }
+
+            User::where('userId', $user->userId)->update($updateData);
+            
+            return redirect()->route('profile')
+                ->with('success', 'Profile updated successfully!');
+
         } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
+            return redirect()->back()
+                ->with('error', 'An unexpected error occurred while updating your profile.')
+                ->withInput();
         }
     }
 
 
     // Delete a user
-    public function delete($userId) {
+    public function delete(Request $request) {
+        $request->validate([
+            'confirm' => 'required|in:DELETE',
+        ]);
+        
         try {
-            $user = User::find($userId);
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
-        }
+            $user = Auth::user();
+            Auth::logout();
+            User::where('userId', $user->userId)->delete();
+            
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            
+            return redirect()->route('welcome')
+                ->with('success', 'Your account has been permanently deleted.');
 
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        try {
-            $user->delete();
-            return response()->json(['message' => 'User deleted']);
         } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
+            return redirect()->back()
+                ->with('error', 'An unexpected error occurred while deleting your account.');
         }
     }
 
 
-    // Get a user by id
-    public function show($userId) {
-        try {
-            $user = User::find($userId);
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
-        }
-
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        return response()->json($user);
+    // Show user profile
+    public function show()
+    {
+        return view('profile.show', ['user' => Auth::user()]);
     }
 
     
-    // Get a user by username
-    public function getByUsername($username) {
-        try {
-            $user = User::where('username', $username)->first();
-        } catch (\Exception $error) {
-            return response()->json(['message' => 'An unexpected error occurred: ' . $error->getMessage()], 500);
-        }
-
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        return response()->json($user);
+    // Show edit profile form
+    public function edit()
+    {
+        return view('profile.edit', ['user' => Auth::user()]);
     }
 }
