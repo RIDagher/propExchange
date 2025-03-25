@@ -66,7 +66,7 @@ class UserController extends Controller
         
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('welcome'));
+            return redirect()->intended('/')->with('success', 'Login successful!');
         }
 
         return back()->withErrors([
@@ -76,13 +76,11 @@ class UserController extends Controller
 
 
     // Logout a user
-    public function logout(Request $request)
-    {
+    public function logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
-        return redirect()->route('welcome')->with('success', 'You have been logged out.');
+        return redirect('/login')->with('success', 'You have been logged out.');
     }
 
 

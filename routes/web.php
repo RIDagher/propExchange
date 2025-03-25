@@ -24,7 +24,7 @@ Route::get('/login', function() {
 
 Route::get('/register', function() {
     return view('register');
-})->name('register');
+})->name('register.submit');
 
 Route::get('/search-map', function () {
     return view('search-map');
