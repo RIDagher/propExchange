@@ -66,6 +66,9 @@ document.addEventListener("DOMContentLoaded", function() {
             method: "POST",
             contentType: "application/json",
             data: JSON.stringify(userData),
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
             success: function(response) {
                 if (response.success) {
                     sessionStorage.setItem("currentUser", JSON.stringify(response.user));

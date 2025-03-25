@@ -21,7 +21,8 @@ class UserController extends Controller
                 'password' => [
                     'required',
                     'string',
-                    'regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/'],
+                    'regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/',
+                    'confirmed'],
                 'role' => 'required|in:agent,client', 
             ], 
             [
@@ -30,28 +31,21 @@ class UserController extends Controller
                 'password.regex' => 'The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter and one number.',
             ]);
         } catch (\Illuminate\Validation\ValidationException $error) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $error->errors(),
-            ], 422);
+            return redirect()->back()
+                             ->withErrors($error->errors())
+                             ->withInput();
         }
-
+    
         try {
             $user = User::create($validatedData);
-
             Auth::login($user);
             $request->session()->regenerate();
 
-            return response()->json([
-                'message' => 'Registration successful',
-                'user' => $user,
-            ], 201);
-
+            return redirect()->route('login')->with('success', 'Registration successful! Please log in.');
         } catch (\Exception $error) {
-            return response()->json([
-                'message' => 'An unexpected error occurred during registration.',
-                'error' => $error->getMessage(),
-            ], 500);
+            return redirect()->back()
+                ->with('error', 'An unexpected error occurred: ' . $error->getMessage())
+                ->withInput();
         }
     }
 
@@ -69,17 +63,13 @@ class UserController extends Controller
             $sessionCookie = config('session.cookie');
             $sessionId = $request->session()->getId();
 
-            return response()->json([
-                'message' => 'Login successful',
-                'user' => Auth::user(),
-                'session' => [
-                    'cookie_name' => $sessionCookie,
-                    'session_id' => $sessionId,
-                ],
-            ]);
+            return redirect()->intended('/')->with('success', 'Login successful!');
+
         }
 
-        return response()->json(['message' => 'Invalid credentials'], 401);
+        return redirect()->back()
+                     ->withErrors(['email' => 'Invalid credentials'])
+                     ->withInput();
     }
 
 
@@ -87,7 +77,9 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        return response()->json(['message' => 'Logout successful']);
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/login')->with('success', 'You have been logged out.');
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\UserController;
 
@@ -19,11 +19,11 @@ Route::get('/search-map', function () {
 
 Route::get('/login', function() {
     return view('login');
-});
+})->name('login');
 
 Route::get('/register', function() {
     return view('register');
-});
+})->name('register.submit');
 
 Route::get('/search-suggestions', [PropertyController::class, 'getSuggestions']);
 
@@ -38,10 +38,10 @@ Route::get('/csrf-token', function () {
 
 // Public routes
 Route::post('/register', [UserController::class, 'register']);
-Route::post('/login', [UserController::class, 'login']);
+Route::post('/login', [UserController::class, 'login'])->name('login.submit');
 
 // Protected routes
-Route::post('/logout', [UserController::class, 'logout']);
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 Route::put('/users/{userId}', [UserController::class, 'update']);
 Route::delete('/users/{userId}', [UserController::class, 'delete']);
 Route::get('/users/{userId}', [UserController::class, 'show']);

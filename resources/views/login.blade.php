@@ -5,33 +5,69 @@
 @section('content')
     <div class="container d-flex justify-content-center align-items-center">
         <div>
-            <form id="login-form" class="p-5 shadow">
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+            <form id="login-form" class="p-5 shadow" method="POST" action="{{ route('login.submit') }}">
+                @csrf
                 <h2 class="py-3">Login</h2>
                 <p class="fs-7">Please login in to continue OR please click <q>Register</q> below to create your account.</p>
+
                 <div class="mb-3">
-                    <label class="form-label">Email address</label>
-                    <input type="email" class="form-control" name="email">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" 
+                        class="form-control"
+                        id="email" 
+                        name="email"
+                        value="{{ old ('email') }}"
+                        required>
+                    @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" 
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    required>
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
                 </div>
-                <button type="submit" class="btn btn-primary w-100 py-2">Submit</button>
+
+                <button type="submit" id="login-btn" class="btn btn-primary w-100 py-2">Submit</button>
                 <p class="pt-4">Don't have an account? <a href="{{ url('/register') }}">Register</a></p>
             </form>
         </div>
     </div>
-
-    <div id="login-modal" class="modal">
-        <div class="login-modal-content">
-            <p id="success"></p>
-            <button id="close">OK</button>
-        </div>
-    </div>
-    @section('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('js/loginUser.js') }}"></script>
-    
-    @endsection
-    
 @endsection
+    
+@section('scripts')
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var flashMessageContainer = document.getElementById('flashMessageContainer');
+        var flashMessage = flashMessageContainer ? flashMessageContainer.getAttribute('data-flash-message') : "";
+        if (flashMessage) {
+            var flashToastEl = document.getElementById('flashToast');
+            if (flashToastEl) {
+                var toast = new bootstrap.Toast(flashToastEl);
+                toast.show();
+            }
+        }
+    });
+    </script>
+
+@endsection
+
+    
