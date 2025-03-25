@@ -12,14 +12,19 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class PropertyImageController extends Controller
 {
+    // return view to create an image
+    public function create($propertyId) {
+        return view('add-image', [
+            'property' => Property::findOrFail($propertyId)
+        ]);
+    }
+
     // Upload an image
     public function store(Request $request, $propertyId) {
-        // Validate property exists
         $property = Property::findOrFail($propertyId);
         
-        // Validate the uploaded file
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image|max:2048', // 2MB max
+            'image' => 'required|image|max:2048',
             'mainImage' => 'sometimes|boolean'
         ]);
 
@@ -27,7 +32,6 @@ class PropertyImageController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // Additional image validation
         $image = $request->file('image');
         $validationError = $this->validateImage($image);
         if ($validationError) {
@@ -35,20 +39,15 @@ class PropertyImageController extends Controller
         }
 
         try {
-            // Generate unique filename
             $filename = $this->generateUniqueFilename($property, $image);
-            
-            // Process and store the image
             $path = $this->processAndStoreImage($image, $filename);
             
-            // Create database record
             $imageRecord = PropertyImage::create([
                 'propertyId' => $propertyId,
                 'path' => $path,
                 'mainImage' => $request->mainImage ?? false
             ]);
 
-            // If this is the main image, unset others
             if ($imageRecord->mainImage) {
                 PropertyImage::where('propertyId', $propertyId)
                     ->where('id', '!=', $imageRecord->id)
@@ -66,10 +65,8 @@ class PropertyImageController extends Controller
     public function destroy($imageId) {
         $image = PropertyImage::findOrFail($imageId);
         
-        // Delete file from storage
         Storage::delete('public/' . $image->path);
         
-        // Delete record
         $image->delete();
         
         return back()->with('success', 'Image deleted successfully');
@@ -84,16 +81,14 @@ class PropertyImageController extends Controller
         ]);
     }
 
-    // Helper methods
+    // Function to validate image type and size
     private function validateImage($image) {
-        // Check image dimensions
         list($width, $height) = getimagesize($image->getPathname());
         
         if ($width < 100 || $width > 1000 || $height < 100 || $height > 1000) {
             return "Width and height must be within 100-1000 pixels range";
         }
 
-        // Check MIME type
         $allowedMimes = ['image/jpeg', 'image/png', 'image/gif'];
         if (!in_array($image->getMimeType(), $allowedMimes)) {
             return "Only JPG, PNG and GIF file types are accepted";
@@ -102,11 +97,11 @@ class PropertyImageController extends Controller
         return null;
     }
 
+    // Function to rename image file path
     private function generateUniqueFilename($property, $image) {
         $extension = $image->getClientOriginalExtension();
         $lastImageId = PropertyImage::max('id') ?? 0;
         
-        // Format: propertyId_ownerId_imageId.extension
         return sprintf('%d_%d_%d.%s',
             $property->propertyId,
             $property->ownerId,
@@ -115,17 +110,15 @@ class PropertyImageController extends Controller
         );
     }
 
+    // Function to upload image in image folder
     private function processAndStoreImage($image, $filename) {
-        // Create intervention image instance
         $img = Image::make($image->getRealPath());
         
-        // Resize if needed (maintain aspect ratio)
         $img->resize(800, 800, function ($constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
         });
         
-        // Store the image
         $path = 'property_images/' . $filename;
         Storage::put('public/' . $path, $img->stream());
         

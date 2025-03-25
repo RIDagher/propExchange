@@ -146,3 +146,28 @@ Completed:
 Todo:
 -Finalize landing page
 -Implement login with google and facebook 
+
+
+2025/3/24 David Demers
+Completed:
+-Change routes to work with views
+-Change controller to return data instead of json
+-Changed controller returns to return views
+Todo:
+-Ensure all protected routes are working as intended
+-Create my-properties.blade.php
+-Create properties.blade.php
+-Test image upload
+
+2025/3/24 Louis Chartier
+Completed:
+-Almost done google sign in and facebook sign in
+Todo:
+-Test google sign and facebook sign in
+
+2025/3/21 Rima Dagher
+Completed:
+-Create property form with validation
+-Almost done search properties
+Todo:
+-Get all properties and map to google map
