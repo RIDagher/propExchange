@@ -24,28 +24,13 @@ Route::get('/login', function () {
 
 Route::get('/register', function () {
     return view('register');
-})->name('register.submit');
+})->name('register');
 
-Route::get('/properties/create', function () {
-    return view('create');
-})->name('create');
 
-Route::get('/search-properties', function () {
-    return view('search-properties');
-})->name('search-properties');
-
-// Added Route to show all properties on map
+// Guest property actions
+Route::get('/search-properties', [PropertyController::class, 'search'])->name('search-properties');
 Route::get('/map-properties', [PropertyController::class, 'mapView'])->name('map-properties');
-Route::get('/properties-query', [PropertyController::class, 'search'])->name('properties-query');
-Route::get('/user-agents-query', [PropertyController::class, 'searchAgents'])->name('user-agents-query');
-
-// Property views
-Route::prefix('properties')->group(function () {
-    Route::get('/', [PropertyController::class, 'showOrCreate'])->name('properties');
-    Route::get('/index', [PropertyController::class, 'index'])->name('index');
-    Route::get('/{property}', [PropertyController::class, 'show'])->name('properties.show');
-    Route::get('/{property}/add-image', [PropertyImageController::class, 'create'])->name('properties.images.create');
-});
+Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
 
 // Guest actions
 Route::post('/register', [UserController::class, 'register'])->name('register.submit');
@@ -67,12 +52,14 @@ Route::middleware('auth')->group(function () {
 
     // Property management routes
     Route::get('/my-properties', [PropertyController::class, 'myProperties'])->name('properties.my');
+    Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
     Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
     Route::get('/properties/{property}/edit', [PropertyController::class, 'edit'])->name('properties.edit');
     Route::post('/properties/{property}/update', [PropertyController::class, 'update'])->name('properties.update');
     Route::post('/properties/{property}/delete', [PropertyController::class, 'destroy'])->name('properties.destroy');
 
     // Image
+    Route::get('/properties/{property}/add-image', [PropertyImageController::class, 'create'])->name('properties.images.create');
     Route::post('/properties/{property}/images', [PropertyImageController::class, 'store'])->name('properties.images.store');
     Route::post('/images/{image}/delete', [PropertyImageController::class, 'destroy'])->name('properties.images.destroy');
 });
