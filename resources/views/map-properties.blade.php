@@ -22,7 +22,7 @@
 
   <!-- View List Button -->
   <div class="text-end mb-3">
-    <a href="{{ route('index') }}" class="btn btn-outline-primary mt-2">
+    <a href="{{ route('search-properties') }}" class="btn btn-outline-primary mt-2">
       <i class="bi bi-list"></i> View List
     </a>
   </div>

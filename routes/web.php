@@ -34,13 +34,8 @@ Route::get('/search-properties', function () {
     return view('search-properties');
 })->name('search-properties');
 
-Route::get('/map-properties', function () {
-    return view('map-properties');
-})->name('map-properties');
-
 // Added Route to show all properties on map
 Route::get('/map-properties', [PropertyController::class, 'mapView'])->name('map-properties');
-
 Route::get('/properties-query', [PropertyController::class, 'search'])->name('properties-query');
 Route::get('/user-agents-query', [PropertyController::class, 'searchAgents'])->name('user-agents-query');
 

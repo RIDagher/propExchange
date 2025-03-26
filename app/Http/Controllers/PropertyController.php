@@ -127,9 +127,8 @@ class PropertyController extends Controller
     // Show all properties
     public function index()
     {
-
-        return view('properties.index', [
-            'properties' => Property::latest()->paginate(10)
+        return view('search-properties', [
+            'properties' => Property::all()
         ]);
     }
 
