@@ -1,19 +1,35 @@
 @extends('layouts.app')
 @section('title', 'Search Properties by Map')
+@section('styles')
+<style>
+  #map {
+    border: 2px solid #4CAF50;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+
+  body {
+    background-color: #f7f9fb;
+  }
+</style>
+@endsection
 
 @section('content')
-<div class="container mt-4">
-  <h1 class="text-center">Properties on Map</h1>
+<div class="container bg-white p-4 shadow rounded mt-4">
+
+
 
   <!-- View List Button -->
   <div class="text-end mb-3">
-    <a href="{{ route('search.properties') }}" class="btn btn-outline-primary">
+    <a href="{{ route('index') }}" class="btn btn-outline-primary mt-2">
       <i class="bi bi-list"></i> View List
     </a>
   </div>
 
   <!-- Map Section -->
   <div id="map" style="height: 500px; width: 100%;"></div>
+</div>
 </div>
 
 <script>
@@ -23,9 +39,51 @@
       center: {
         lat: 45.4215,
         lng: -75.6993
-      } // Default center: Ottawa
+      },
+      styles: [{
+          "featureType": "all",
+          "elementType": "labels.text",
+          "stylers": [{
+            "color": "#878787"
+          }]
+        },
+        {
+          "featureType": "all",
+          "elementType": "labels.text.stroke",
+          "stylers": [{
+            "visibility": "off"
+          }]
+        },
+        {
+          "featureType": "landscape",
+          "elementType": "all",
+          "stylers": [{
+            "color": "#f9f5ed"
+          }]
+        },
+        {
+          "featureType": "road.highway",
+          "elementType": "all",
+          "stylers": [{
+            "color": "#f5f5f5"
+          }]
+        },
+        {
+          "featureType": "road.highway",
+          "elementType": "geometry.stroke",
+          "stylers": [{
+            "color": "#c9c9c9"
+          }]
+        },
+        {
+          "featureType": "water",
+          "elementType": "all",
+          "stylers": [{
+            "color": "#aee0f4"
+          }]
+        }
+      ]
     });
-
     // data
     const properties = [{
         title: "Modern House",
