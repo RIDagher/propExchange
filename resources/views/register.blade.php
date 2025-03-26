@@ -72,6 +72,15 @@
                     </select>
                 </div>
                 <button type="submit" id="register-btn" class="btn btn-primary w-100 py-2">Submit</button>
+
+                <div class="d-flex align-items-center my-3">
+                    <hr class="flex-grow-1">
+                    <span class="mx-2">OR</span>
+                    <hr class="flex-grow-1">
+                </div>
+
+                <a href="{{ route('login.google') }}" class="btn btn-danger w-100 py-2 mb-2">Register as <q>client</q> with Google</a>
+
                 <p class="pt-4">Have an account? <a href="{{ url('/login') }}">Login</a></p>
             </form>
         </div>
@@ -83,13 +92,16 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     var flashModalEl = document.getElementById('flashModal');
-    var flashMessage = flashModalEl.getAttribute('data-flash-message');
-    if (flashMessage && flashMessage.trim() !== "") {
-        var flashModal = new bootstrap.Modal(flashModalEl);
-        flashModal.show();
+    if (flashModalEl) {
+        var flashMessage = flashModalEl.getAttribute('data-flash-message');
+        if (flashMessage && flashMessage.trim() !== "") {
+            var flashModal = new bootstrap.Modal(flashModalEl);
+            flashModal.show();
+        }
     }
 });
 </script>
+@vite(['resources/js/createUser.js'])
 @endsection
 
 
