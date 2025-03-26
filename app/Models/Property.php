@@ -18,6 +18,14 @@ class Property extends Model {
     
     public $timestamps = false;
 
+    public function owner() {
+        return $this->belongsTo(User::class, 'ownerId');
+    }
+
+    public function agent() {
+        return $this->belongsTo(User::class, 'agentId');
+    }
+
     public function images() {
         return $this->hasMany(PropertyImage::class, 'propertyId');
     }
