@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PropertyImageController;
-use App\Http\Controllers\SocialAuthController;
 
 // Get CSRF token to pass for other postman request
 Route::get('/csrf-token', function () {
@@ -12,6 +11,7 @@ Route::get('/csrf-token', function () {
         'csrf_token' => csrf_token(),
     ]);
 });
+
 
 // Views
 Route::get('/', function () {
@@ -30,9 +30,9 @@ Route::get('/properties/create', function () {
     return view('create');
 })->name('create');
 
-Route::get('/search-properties', function () {
-    return view('search-properties');
-})->name('search-properties');
+
+Route::get('/search-properties', [PropertyController::class, 'search'])->name('search-properties');
+
 
 // Added Route to show all properties on map
 Route::get('/map-properties', [PropertyController::class, 'mapView'])->name('map-properties');
@@ -50,10 +50,6 @@ Route::prefix('properties')->group(function () {
 // Guest actions
 Route::post('/register', [UserController::class, 'register'])->name('register.submit');
 Route::post('/login', [UserController::class, 'login'])->name('login.submit');
-
-// Google 
-Route::get('/login/google', [SocialAuthController::class, 'redirectToGoogle'])->name('login.google');
-Route::get('/login/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
 // Protected routes
 Route::middleware('auth')->group(function () {

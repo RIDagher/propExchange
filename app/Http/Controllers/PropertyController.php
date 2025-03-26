@@ -192,17 +192,47 @@ class PropertyController extends Controller
     // Search properties
     public function search(Request $request)
     {
-        $query = Property::query();
+        $query = property::query();
 
-        if ($request->has('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%')
-                ->orWhere('description', 'like', '%' . $request->search . '%');
+        if ($request->filled('city')) {
+            $query->where('city', 'like', '%' . $request->city . '%');
         }
 
-        return view('properties.search', [
-            'properties' => $query->paginate(10),
-            'searchTerm' => $request->search ?? ''
-        ]);
+        if ($request->filled('title')) {
+            $query->where('title', 'like', '%' . $request->title . '%');
+        }
+
+        if ($request->filled('type')) {
+            $query->where('propertyType', $request->type);
+        }
+
+        if ($request->filled('bedrooms')) {
+            $query->where('bedrooms', '>=', $request->bedrooms);
+        }
+
+        if ($request->filled('bathrooms')) {
+            $query->where('bathrooms', '>=', $request->bathrooms);
+        }
+
+        if ($request->filled('min-price')) {
+            $query->where('price', '>=', $request->{'min-price'});
+        }
+
+        if ($request->filled('max-price')) {
+            $query->where('price', '<=', $request->{'max-price'});
+        }
+
+        if ($request->filled('yearBuilt')) {
+            $query->where('yearBuilt', $request->yearBuilt);
+        }
+
+        if ($request->filled('isGarage')) {
+            $query->where('isGarage', true);
+        }
+
+        $properties = $query->orderBy('createdAT', 'desc')->paginate(10);
+
+        return view('search-properties', compact('properties'));
     }
 
     // get all properties for map
