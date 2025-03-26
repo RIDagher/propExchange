@@ -47,6 +47,14 @@
                 </div>
 
                 <button type="submit" id="login-btn" class="btn btn-primary w-100 py-2">Submit</button>
+
+                <div class="d-flex align-items-center my-3">
+                    <hr class="flex-grow-1">
+                    <span class="mx-2">OR</span>
+                    <hr class="flex-grow-1">
+                </div>
+
+                <a href="{{ route('login.google') }}" class="btn btn-danger w-100 py-2 mb-2">Login as <q>client</q> with Google</a>
                 <p class="pt-4">Don't have an account? <a href="{{ url('/register') }}">Register</a></p>
             </form>
         </div>
@@ -67,7 +75,7 @@
         }
     });
     </script>
-
+@vite(['resources/js/loginUser.js'])
 @endsection
 
     

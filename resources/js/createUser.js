@@ -4,12 +4,15 @@ document.addEventListener("DOMContentLoaded", function() {
     form.addEventListener("submit", function (event){
         event.preventDefault();
 
+        document.querySelectorAll(".error-msg").forEach((el) => el.remove());
+        document.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
+
         let formData = new FormData(form);
         let userData = {
             username: formData.get("username").trim(),
             email: formData.get("email").trim(),
             password: formData.get("password"),
-            rePassword: formData.get("re-password"),
+            rePassword: formData.get("password_confirmation"),
             role: formData.get("role"),
         };
 
@@ -41,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         if (data.password !== data.rePassword) {
-            errors.push({ field: "re-password", message: "Passwords do not match." });
+            errors.push({ field: "password_confirmation", message: "Passwords do not match." });
         }
         const validRoles = ['agent', 'client'];
         if (!validRoles.includes(data.role)) {
@@ -51,15 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return errors;
     }
 
-    function validateEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
     function showValidationErrors(errors) {
-        document.querySelectorAll(".form-control").forEach((msg) => {
-            msg.remove();
-        });
-
         errors.forEach((error) => {
             let inputField = document.querySelector(`[name="${error.field}"]`);
             inputField.classList.add("is-invalid");
