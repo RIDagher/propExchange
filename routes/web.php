@@ -12,7 +12,6 @@ Route::get('/csrf-token', function () {
     ]);
 });
 
-
 // Views
 Route::get('/', function () {
     return view('welcome');
