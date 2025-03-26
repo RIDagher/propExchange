@@ -3,47 +3,76 @@
 
 @section('content')
 <div class="container mt-4">
-  <h1 class="text-center">Find a Property</h1>
+  <form method="GET" action="{{route('index')}}" class="row g-3 align-items-end bg-light p-4 rounded shadow">
+    <div class="col-md-3">
+      <input type="text" name="city" class="form-control" placeholder="City">
+    </div>
 
-  <!-- Search Form -->
-  <form method="GET" action="{{ route('search.properties') }}" class="bg-light p-3 rounded shadow">
-    <div class="row g-2">
-      <div class="col-md-3">
-        <input type="text" name="title" class="form-control" placeholder="Property Title">
-      </div>
-      <div class="col-md-3">
-        <input type="text" name="city" class="form-control" placeholder="City">
-      </div>
-      <div class="col-md-2">
-        <select name="property_type" class="form-select">
-          <option value="">Type</option>
-          <option value="House">House</option>
-          <option value="Condo">Condo</option>
-          <option value="Cottage">Cottage</option>
-        </select>
-      </div>
-      <div class="col-md-3">
-        <select id="priceRange" class="form-select">
-          <option value="">Price Range</option>
-          <option value="0-250000">Up to $250,000</option>
-          <option value="250000-500000">$250,000 - $500,000</option>
-          <option value="500000-750000">$500,000 - $750,000</option>
-          <option value="750000-1000000">$750,000 - $1M</option>
-          <option value="1000000+">Over $1M</option>
-        </select>
-      </div>
-      <div class="col-md-12 text-center">
-        <button type="submit" class="btn btn-primary mt-2"><i class="bi bi-search"></i> Search</button>
-      </div>
+    <!-- Type search -->
+    <div class="col-md-2">
+      <select name="type" class="form-select">
+        <option value="">Type</option>
+        <option value="House">House</option>
+        <option value="Condo">Condo</option>
+        <option value="Cottage">Cottage</option>
+        <option value="Multiplex">Myltiplex</option>
+      </select>
+    </div>
 
-      <!-- View Map Button -->
-      <div class="text-end mt-2">
-        <a href="{{ route('search.map') }}" class="btn btn-outline-primary">
-          <i class="bi bi-map"></i> View Map
-        </a>
-      </div>
+    <!-- bedrooms -->
+    <div class="col-md-2">
+      <select name="bedrooms" class="form-select">
+        <option value="">Bedrooms</option>
+        @for($i =1; $i <= 5; $i++)
+          <option value="{{$i}}">{{$i}}+</option>
+          @endfor
+      </select>
+    </div>
+
+    <!-- Bathrooms -->
+    <div class="col-md-2">
+      <select name="bathrooms" class="form-select">
+        <option value="">Bathrooms</option>
+        @for($i =1; $i <= 5; $i++)
+          <option value="{{$i}}">{{$i}}+</option>
+          @endfor
+      </select>
+    </div>
+
+    <!-- Price Range -->
+    <div class="col-md-2">
+      <input type="number" name="min-price" class="form-control" placeholder="Min Price">
+    </div>
+    <div class="col-md-2">
+      <input type="number" name="max-price" class="form-control" placeholder="Max Price">
+    </div>
+
+    <!-- Year Built -->
+    <div class="col-md-2">
+      <input type="number" name="year_built" class="form-control" placeholder="Year Built">
+    </div>
+
+    <!-- Has Garage -->
+    <div class="col-md-2 form-check">
+      <input class="form-check-input" type="checkbox" name="garage" value="1" id="garageCheck">
+      <label class="form-check-label" for="garageCheck">
+        Has Garage
+      </label>
+    </div>
+
+    <!-- Search -->
+    <div class="col-md-12 text-center">
+      <button type="submit" class="btn btn-primary px-5 mt-2"><i class="bi bi-search"></i>Search</button>
     </div>
   </form>
+
+  <!-- View Map Button -->
+  <div class="text-end mt-2">
+    <a href="{{ route('map-properties') }}" class="btn btn-outline-primary">
+      <i class="bi bi-map"></i> View Map
+    </a>
+  </div>
+
   
-</div>
-@endsection
+  <div>
+    @endsection

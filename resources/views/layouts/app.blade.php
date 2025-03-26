@@ -25,7 +25,7 @@
                             <a class="nav-link" href="{{ url('/') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/search-properties') }}">Find a Property</a>
+                            <a class="nav-link" href="{{ route('search-properties') }}">Find a Property</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Find a Realtor</a>

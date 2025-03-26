@@ -26,16 +26,25 @@ Route::get('/register', function() {
     return view('register');
 })->name('register.submit');
 
-Route::get('/search-map', function () {
-    return view('search-map');
-})->name('search.map');
+Route::get('/properties/create', function () {
+    return view('create');
+})->name('create');
 
-Route::get('/search-properties', [PropertyController::class, 'search'])->name('search.properties');
-Route::get('/search-users-agents', [PropertyController::class, 'searchAgents'])->name('search.agents');
+Route::get('/search-properties', function () {
+    return view('search-properties');
+})->name('search-properties');
+
+Route::get('/map-properties', function () {
+    return view('map-properties');
+})->name('map-properties');
+
+Route::get('/properties-query', [PropertyController::class, 'search'])->name('properties-query');
+Route::get('/user-agents-query', [PropertyController::class, 'searchAgents'])->name('user-agents-query');
 
 // Property views
 Route::prefix('properties')->group(function () {
     Route::get('/', [PropertyController::class, 'showOrCreate'])->name('properties');
+    Route::get('/index', [PropertyController::class, 'index'])->name('index');
     Route::get('/{property}', [PropertyController::class, 'show'])->name('properties.show');
     Route::get('/{property}/add-image', [PropertyImageController::class, 'create'])->name('properties.images.create');
 });
