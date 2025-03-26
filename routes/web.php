@@ -18,11 +18,11 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::get('/login', function() {
+Route::get('/login', function () {
     return view('login');
 })->name('login');
 
-Route::get('/register', function() {
+Route::get('/register', function () {
     return view('register');
 })->name('register.submit');
 
@@ -37,6 +37,9 @@ Route::get('/search-properties', function () {
 Route::get('/map-properties', function () {
     return view('map-properties');
 })->name('map-properties');
+
+// Added Route to show all properties on map
+Route::get('/map-properties', [PropertyController::class, 'mapView'])->name('map-properties');
 
 Route::get('/properties-query', [PropertyController::class, 'search'])->name('properties-query');
 Route::get('/user-agents-query', [PropertyController::class, 'searchAgents'])->name('user-agents-query');
@@ -54,15 +57,15 @@ Route::post('/register', [UserController::class, 'register'])->name('register.su
 Route::post('/login', [UserController::class, 'login'])->name('login.submit');
 
 // Protected routes
-Route::middleware('auth')->group(function() {
+Route::middleware('auth')->group(function () {
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-    
+
     // User profile routes
     Route::get('/profile', [UserController::class, 'show'])->name('profile');
     Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [UserController::class, 'update'])->name('profile.update');
     Route::post('/profile/delete', [UserController::class, 'delete'])->name('profile.delete');
-    
+
     // Property management routes
     Route::get('/my-properties', [PropertyController::class, 'myProperties'])->name('properties.my');
     Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
