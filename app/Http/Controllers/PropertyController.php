@@ -7,16 +7,19 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PropertyController extends Controller {
+class PropertyController extends Controller
+{
 
     // Show property creation form
-    public function create() {
+    public function create()
+    {
         return view('properties.create', [
             'agents' => User::where('role', 'agent')->get()
         ]);
     }
     // Create a property
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validatedData = $request->validate([
             'title' => 'required|string|regex:/^[a-zA-Z0-9! -]{1,255}$/',
             'description' => 'required|string|regex:/^[a-zA-Z0-9.!@ -]+$/',
@@ -50,7 +53,8 @@ class PropertyController extends Controller {
     }
 
     // Show property edit form
-    public function edit($propertyId) {
+    public function edit($propertyId)
+    {
         $property = Property::findOrFail($propertyId);
         if (Auth::id() !== $property->ownerId) {
             return back()->with('error', 'Unauthorized');
@@ -62,7 +66,8 @@ class PropertyController extends Controller {
         ]);
     }
     // Update a property
-    public function update(Request $request, $propertyId) {
+    public function update(Request $request, $propertyId)
+    {
         $property = Property::findOrFail($propertyId);
         $user = Auth::user();
 
@@ -102,7 +107,8 @@ class PropertyController extends Controller {
     }
 
     // Delete a property
-    public function destroy($propertyId) {
+    public function destroy($propertyId)
+    {
         $property = Property::findOrFail($propertyId);
 
         if (Auth::id() !== $property->ownerId) {
@@ -119,27 +125,32 @@ class PropertyController extends Controller {
     }
 
     // Show all properties
-    public function index() {
+    public function index()
+    {
+
         return view('properties.index', [
             'properties' => Property::latest()->paginate(10)
         ]);
     }
 
     // Show single property
-    public function show($propertyId) {
+    public function show($propertyId)
+    {
         return view('properties.show', [
             'property' => Property::findOrFail($propertyId)
         ]);
     }
 
     // Get a list of agents
-    public function searchAgents() {
+    public function searchAgents()
+    {
         $agents = User::where('role', 'agent')->get();
         return view('search-users-agents', ['agents' => $agents]);
     }
 
     // Show properties by user
-    public function userProperties($userId) {
+    public function userProperties($userId)
+    {
         if (Auth::id() != $userId) {
             abort(403);
         }
@@ -151,26 +162,28 @@ class PropertyController extends Controller {
     }
 
     // Show a property specificed by propertyId or create one
-    public function showOrCreate(Request $request) {
+    public function showOrCreate(Request $request)
+    {
         if ($request->has('propertyId')) {
             return $this->show($request->propertyId);
         }
-        
+
         return view('properties.create', [
             'agents' => User::where('role', 'agent')->get()
         ]);
     }
 
     // Check if user is an agent or client to view they're properties
-    public function myProperties() {
+    public function myProperties()
+    {
         $user = Auth::user();
-        
+
         if ($user->role === 'agent') {
             $properties = Property::where('agentId', $user->userId)->get();
         } else {
             $properties = Property::where('ownerId', $user->userId)->get();
         }
-        
+
         return view('my-properties', [
             'properties' => $properties,
             'user' => $user
@@ -178,17 +191,28 @@ class PropertyController extends Controller {
     }
 
     // Search properties
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $query = Property::query();
 
         if ($request->has('search')) {
-            $query->where('title', 'like', '%'.$request->search.'%')
-                  ->orWhere('description', 'like', '%'.$request->search.'%');
+            $query->where('title', 'like', '%' . $request->search . '%')
+                ->orWhere('description', 'like', '%' . $request->search . '%');
         }
 
         return view('properties.search', [
             'properties' => $query->paginate(10),
             'searchTerm' => $request->search ?? ''
+        ]);
+    }
+
+    // get all properties for map
+    public function mapView()
+    {
+        $properties = Property::all();
+
+        return view('map-properties', [
+            'properties' => $properties
         ]);
     }
 }

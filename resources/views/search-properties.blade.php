@@ -7,6 +7,9 @@
     <div class="col-md-3">
       <input type="text" name="city" class="form-control" placeholder="City">
     </div>
+    <div class="col-md-3">
+      <input type="text" name="title" class="form-control" placeholder="title">
+    </div>
 
     <!-- Type search -->
     <div class="col-md-2">
@@ -72,7 +75,6 @@
       <i class="bi bi-map"></i> View Map
     </a>
   </div>
+</div>
 
-  
-  <div>
-    @endsection
+@endsection
