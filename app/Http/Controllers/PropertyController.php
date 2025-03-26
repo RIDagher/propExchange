@@ -167,8 +167,9 @@ class PropertyController extends Controller
     }
 
     // Search properties
-    public function search(Request $request) {
-        $query = Property::query();
+    public function search(Request $request)
+    {
+        $query = property::query();
 
         if ($request->filled('city')) {
             $query->where('city', 'like', '%' . $request->city . '%');
@@ -191,31 +192,24 @@ class PropertyController extends Controller
         }
 
         if ($request->filled('min-price')) {
-            $query->where('price', '>=', $request->input('min-price'));
+            $query->where('price', '>=', $request->{'min-price'});
         }
 
         if ($request->filled('max-price')) {
-            $query->where('price', '<=', $request->input('max-price'));
+            $query->where('price', '<=', $request->{'max-price'});
         }
 
-        if ($request->filled('year_built')) {
-            $query->where('yearBuilt', '>=', $request->year_built);
+        if ($request->filled('yearBuilt')) {
+            $query->where('yearBuilt', $request->yearBuilt);
         }
 
-        if ($request->filled('garage') && $request->garage == 1) {
+        if ($request->filled('isGarage')) {
             $query->where('isGarage', true);
         }
 
-        // Get filtered or all properties
-        $properties = $query->with(['owner', 'agent', 'images'])
-                        ->orderBy('createdAt', 'desc')
-                        ->paginate(10);
+        $properties = $query->orderBy('createdAT', 'desc')->paginate(10);
 
-        // Pass all filter values back to view to maintain form state
-        return view('search-properties', [
-            'properties' => $properties,
-            'filters' => $request->all()
-        ]);
+        return view('search-properties', compact('properties'));
     }
 
     // get all properties for map
