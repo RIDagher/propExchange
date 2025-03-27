@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id('imageId');
             $table->unsignedBigInteger('propertyId');
             $table->string('imagePath');
-            $table->boolean('mainImage')->default(false)->index();
+            $table->boolean('isMain')->default(false)->index();
 
             $table->foreign('propertyId')->references('propertyId')->on('properties')->onDelete('cascade');
         });

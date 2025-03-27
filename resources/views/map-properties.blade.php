@@ -22,7 +22,7 @@
 
   <!-- View List Button -->
   <div class="text-end mb-3">
-    <a href="{{ route('index') }}" class="btn btn-outline-primary mt-2">
+    <a href="{{ route('search-properties') }}" class="btn btn-outline-primary mt-2">
       <i class="bi bi-list"></i> View List
     </a>
   </div>
@@ -33,91 +33,29 @@
 </div>
 
 <script>
+  const properties = @json($properties);
+
   function initMap() {
-    let map = new google.maps.Map(document.getElementById("map"), {
+    const map = new google.maps.Map(document.getElementById("map"), {
       zoom: 6,
       center: {
         lat: 45.4215,
         lng: -75.6993
       },
-      styles: [{
-          "featureType": "all",
-          "elementType": "labels.text",
-          "stylers": [{
-            "color": "#878787"
-          }]
-        },
-        {
-          "featureType": "all",
-          "elementType": "labels.text.stroke",
-          "stylers": [{
-            "visibility": "off"
-          }]
-        },
-        {
-          "featureType": "landscape",
-          "elementType": "all",
-          "stylers": [{
-            "color": "#f9f5ed"
-          }]
-        },
-        {
-          "featureType": "road.highway",
-          "elementType": "all",
-          "stylers": [{
-            "color": "#f5f5f5"
-          }]
-        },
-        {
-          "featureType": "road.highway",
-          "elementType": "geometry.stroke",
-          "stylers": [{
-            "color": "#c9c9c9"
-          }]
-        },
-        {
-          "featureType": "water",
-          "elementType": "all",
-          "stylers": [{
-            "color": "#aee0f4"
-          }]
-        }
-      ]
     });
-    // data
-    const properties = [{
-        title: "Modern House",
-        type: "House",
-        lat: 43.6532,
-        lng: -79.3832
-      },
-      {
-        title: "Luxury Condo",
-        type: "Condo",
-        lat: 49.2827,
-        lng: -123.1207
-      },
-      {
-        title: "Cozy Cottage",
-        type: "Cottage",
-        lat: 46.8139,
-        lng: -71.2082
-      }
-    ];
 
-    // 
     properties.forEach(property => {
       const marker = new google.maps.Marker({
         position: {
-          lat: property.lat,
-          lng: property.lng
+          lat: parseFloat(property.latitude),
+          lng: parseFloat(property.longitude)
         },
         map: map,
         title: property.title
       });
 
       const infoWindow = new google.maps.InfoWindow({
-        content: `<strong>${property.title}</strong><br>Type: ${property.type}`
+        content: `<strong>${property.title}</strong><br>${property.propertyType}<br>$${property.price}`
       });
 
       marker.addListener('click', () => {

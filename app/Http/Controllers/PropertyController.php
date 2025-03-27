@@ -7,11 +7,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PropertyController extends Controller {
+class PropertyController extends Controller
+{
 
     // Show property creation form
     public function create() {
-        return view('properties.create', [
+        return view('create-property', [
             'agents' => User::where('role', 'agent')->get()
         ]);
     }
@@ -70,7 +71,6 @@ class PropertyController extends Controller {
             return back()->with('error', 'You can only edit your own properties');
         }
 
-
         $validatedData = $request->validate([
             'title' => 'sometimes|string|regex:/^[a-zA-Z0-9! -]{1,255}$/',
             'description' => 'sometimes|string|regex:/^[a-zA-Z0-9.!@ -]+$/',
@@ -120,16 +120,15 @@ class PropertyController extends Controller {
 
     // Show all properties
     public function index() {
-        return view('properties.index', [
-            'properties' => Property::latest()->paginate(10)
+        return view('search-properties', [
+            'properties' => Property::all()
         ]);
     }
 
     // Show single property
     public function show($propertyId) {
-        return view('properties.show', [
-            'property' => Property::findOrFail($propertyId)
-        ]);
+        $property = Property::with(['agent', 'images'])->findOrFail($propertyId);
+        return view('show-property', compact('property'));
     }
 
     // Get a list of agents
@@ -150,27 +149,16 @@ class PropertyController extends Controller {
         ]);
     }
 
-    // Show a property specificed by propertyId or create one
-    public function showOrCreate(Request $request) {
-        if ($request->has('propertyId')) {
-            return $this->show($request->propertyId);
-        }
-        
-        return view('properties.create', [
-            'agents' => User::where('role', 'agent')->get()
-        ]);
-    }
-
     // Check if user is an agent or client to view they're properties
     public function myProperties() {
         $user = Auth::user();
-        
+
         if ($user->role === 'agent') {
             $properties = Property::where('agentId', $user->userId)->get();
         } else {
             $properties = Property::where('ownerId', $user->userId)->get();
         }
-        
+
         return view('my-properties', [
             'properties' => $properties,
             'user' => $user
@@ -178,17 +166,57 @@ class PropertyController extends Controller {
     }
 
     // Search properties
-    public function search(Request $request) {
-        $query = Property::query();
+    public function search(Request $request)
+    {
+        $query = property::query();
 
-        if ($request->has('search')) {
-            $query->where('title', 'like', '%'.$request->search.'%')
-                  ->orWhere('description', 'like', '%'.$request->search.'%');
+        if ($request->filled('city')) {
+            $query->where('city', 'like', '%' . $request->city . '%');
         }
 
-        return view('properties.search', [
-            'properties' => $query->paginate(10),
-            'searchTerm' => $request->search ?? ''
+        if ($request->filled('title')) {
+            $query->where('title', 'like', '%' . $request->title . '%');
+        }
+
+        if ($request->filled('type')) {
+            $query->where('propertyType', $request->type);
+        }
+
+        if ($request->filled('bedrooms')) {
+            $query->where('bedrooms', '>=', $request->bedrooms);
+        }
+
+        if ($request->filled('bathrooms')) {
+            $query->where('bathrooms', '>=', $request->bathrooms);
+        }
+
+        if ($request->filled('min-price')) {
+            $query->where('price', '>=', $request->{'min-price'});
+        }
+
+        if ($request->filled('max-price')) {
+            $query->where('price', '<=', $request->{'max-price'});
+        }
+
+        if ($request->filled('yearBuilt')) {
+            $query->where('yearBuilt', $request->yearBuilt);
+        }
+
+        if ($request->filled('isGarage')) {
+            $query->where('isGarage', true);
+        }
+
+        $properties = $query->orderBy('createdAT', 'desc')->paginate(10);
+
+        return view('search-properties', compact('properties'));
+    }
+
+    // get all properties for map
+    public function mapView() {
+        $properties = Property::all();
+
+        return view('map-properties', [
+            'properties' => $properties
         ]);
     }
 }

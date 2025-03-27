@@ -20,18 +20,33 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">PropExchange</a>
-                <div id="navbar">
+                <div id="navbar" class="navbar-collapse">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-link" href="{{ url('/') }}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-link" href="{{ route('search-properties') }}">Find a Property</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-link" href="#">Find a Realtor</a>
+                        </li>
+                    </ul>
+
                     <ul class="navbar-nav ms-auto">
+                        @auth
+                        @if(Auth::user()->role === 'client')
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-link" href="{{ route('properties.create') }}">
+                                    <i class="bi bi-plus-circle"></i> List New Property
+                                </a>
+                            </li>
+                        @endif
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/') }}">Home</a>
+                            <a class="nav-link btn btn-link" href="{{ route('properties.my') }}">
+                                <i class="bi bi-house-door"></i> My Properties
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('search-properties') }}">Find a Property</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Find a Realtor</a>
-                        </li>
-                        @auth 
                         <li class="nav-item">
                             <span class="nav-link"> Hello, {{ Auth::user()->username }}</span>
                         </li>
@@ -43,7 +58,10 @@
                         </li>
                         @else
                         <li class="nav-item">
-                            <a href="{{ route('login') }}" class="nav-link">Login</a>
+                            <a href="{{ route('login') }}" class="nav-link btn btn-link">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('register') }}" class="nav-link btn btn-link">Register</a>
                         </li>
                         @endauth
                     </ul>
