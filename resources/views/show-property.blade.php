@@ -8,6 +8,50 @@
             <h1 class="display-5 fw-bold">{{ $property->title }}</h1>
             <p class="text-muted">{{ $property->address }}, {{ $property->city }}, {{ $property->province }}, {{ $property->postalCode }}</p>
             
+            @if($property->images->count() > 0)
+            <div class="property-images mb-4">
+                <div id="propertyCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner rounded">
+                        @foreach($property->images as $key => $image)
+                        <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+                            <img src="{{ asset('storage/' . $image->imagePath) }}" 
+                                 class="d-block w-100" 
+                                 alt="Property image {{ $key + 1 }}"
+                                 style="max-height: 500px; object-fit: cover;">
+                        </div>
+                        @endforeach
+                    </div>
+                    @if($property->images->count() > 1)
+                    <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    @endif
+                </div>
+                
+                @if($property->images->count() > 1)
+                <div class="d-flex flex-wrap mt-2">
+                    @foreach($property->images as $key => $image)
+                    <img src="{{ asset('storage/' . $image->imagePath) }}" 
+                        class="img-thumbnail me-2 mb-2" 
+                        style="width: 80px; height: 60px; cursor: pointer; object-fit: cover;"
+                        onclick="jumpToSlide({{ $key }})"
+                        alt="Thumbnail {{ $key + 1 }}"
+                        data-bs-target="#propertyCarousel">
+                    @endforeach
+                </div>
+                @endif
+            </div>
+            @else
+            <div class="bg-light rounded mb-4 d-flex align-items-center justify-content-center" style="height: 300px;">
+                <p class="text-muted">No images available for this property</p>
+            </div>
+            @endif
+
             <div class="d-flex align-items-center mb-4">
                 <span class="badge bg-{{ $property->isSold ? 'danger' : 'success' }} me-3">
                     {{ $property->isSold ? 'Sold' : 'For Sale' }}
@@ -111,9 +155,6 @@
     @auth
         @if(Auth::id() === $property->ownerId || Auth::user()->role === 'agent')
             <div class="mt-5 d-flex justify-content-end gap-2">
-                <a href="{{ route('properties.edit', $property->propertyId) }}" class="btn btn-outline-primary">
-                    Edit Property
-                </a>
                 <a href="{{ route('properties.images.create', $property->propertyId) }}" class="btn btn-outline-secondary">
                     Add Images
                 </a>
@@ -121,29 +162,20 @@
         @endif
     @endauth
 </div>
-@endsection
-
 @section('scripts')
-@if(config('services.google.maps_key'))
-<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&callback=initMap" async defer></script>
+@if($property->images->count() > 1)
 <script>
-    function initMap() {
-        const mapElement = document.getElementById('propertyMap');
-        const lat = parseFloat(mapElement.dataset.lat);
-        const lng = parseFloat(mapElement.dataset.lng);
-        
-        const propertyLocation = { lat: lat, lng: lng };
-        const map = new google.maps.Map(mapElement, {
-            zoom: 15,
-            center: propertyLocation
-        });
-        
-        new google.maps.Marker({
-            position: propertyLocation,
-            map: map,
-            title: '{{ $property->title }}'
-        });
+    const carousel = new bootstrap.Carousel(document.getElementById('propertyCarousel'), {
+        interval: false,
+        touch: true
+    });
+
+    function jumpToSlide(index) {
+        const myCarousel = document.getElementById('propertyCarousel');
+        const carousel = bootstrap.Carousel.getInstance(myCarousel);
+        carousel.to(index);
     }
 </script>
 @endif
+@endsection
 @endsection

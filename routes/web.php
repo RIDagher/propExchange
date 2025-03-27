@@ -26,16 +26,14 @@ Route::get('/register', function () {
     return view('register');
 })->name('register');
 
+Route::get('/search-agents', function () {
+    return view('search-agents');
+})->name('search-agents');
 
 
 Route::get('/search-properties', [PropertyController::class, 'search'])->name('search-properties');
 Route::get('/map-properties', [PropertyController::class, 'mapView'])->name('map-properties');
 Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
-
-
-Route::get('/search-agents', function () {
-    return view('search-agents');
-})->name('search-agents');
 
 Route::get('/properties-query', [PropertyController::class, 'search'])->name('properties-query');
 Route::get('/user-agents-query', [PropertyController::class, 'searchAgents'])->name('user-agents-query');
