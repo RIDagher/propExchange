@@ -26,26 +26,15 @@ Route::get('/register', function () {
     return view('register');
 })->name('register');
 
-Route::get('/search-agents', function () {
-    return view('search-agents');
-})->name('search-agents');
-
-
+// Public property viewing and searching
 Route::get('/search-properties', [PropertyController::class, 'search'])->name('search-properties');
+Route::get('/properties-query', [PropertyController::class, 'search'])->name('properties-query');
 Route::get('/map-properties', [PropertyController::class, 'mapView'])->name('map-properties');
 Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
 
-Route::get('/properties-query', [PropertyController::class, 'search'])->name('properties-query');
-Route::get('/user-agents-query', [PropertyController::class, 'searchAgents'])->name('user-agents-query');
-
-// Property views
-Route::prefix('properties')->group(function () {
-    Route::get('/', [PropertyController::class, 'showOrCreate'])->name('properties');
-    Route::get('/index', [PropertyController::class, 'index'])->name('index');
-    Route::get('/{property}', [PropertyController::class, 'show'])->name('properties.show');
-    Route::get('/{property}/add-image', [PropertyImageController::class, 'create'])->name('properties.images.create');
-});
-
+// Public agent viewing and search
+Route::get('/search-agents', [UserController::class, 'searchAgents'])->name('search-agents');
+Route::get('/contact-agent/{agentId}', [UserController::class, 'showContactAgent'])->name('contact.agent');
 
 // Guest actions
 Route::post('/register', [UserController::class, 'register'])->name('register.submit');
@@ -59,11 +48,8 @@ Route::get('/login/google/callback', [SocialAuthController::class, 'handleGoogle
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-    // User profile routes
-    Route::get('/profile', [UserController::class, 'show'])->name('profile');
-    Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [UserController::class, 'update'])->name('profile.update');
-    Route::post('/profile/delete', [UserController::class, 'delete'])->name('profile.delete');
+    Route::get('/properties/{property}/add-agent', [PropertyController::class, 'showAddAgentForm'])->name('properties.agent.create');
+    Route::post('/properties/{property}/agent', [PropertyController::class, 'addAgent'])->name('properties.agent.store');
 
     // Property management routes
     Route::get('/my-properties', [PropertyController::class, 'myProperties'])->name('properties.my');

@@ -36,7 +36,6 @@
                             </div>
                         </div>
                         
-                        <!-- Main Image Checkbox -->
                         <div class="mb-4 form-check form-switch">
                             <input class="form-check-input" type="checkbox" 
                                    id="isMain" name="isMain" value="1">
@@ -48,7 +47,6 @@
                             </div>
                         </div>
                         
-                        <!-- Preview (will be shown after image selection) -->
                         <div class="mb-4 d-none" id="imagePreviewContainer">
                             <label class="form-label">Image Preview</label>
                             <div class="border p-2 rounded">
@@ -74,7 +72,7 @@
 
 @section('scripts')
 <script>
-    // Image preview functionality
+    // Image preview
     document.getElementById('image').addEventListener('change', function(e) {
         const previewContainer = document.getElementById('imagePreviewContainer');
         const preview = document.getElementById('imagePreview');

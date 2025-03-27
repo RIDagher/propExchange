@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable {
     use HasFactory;
@@ -19,8 +18,7 @@ class User extends Authenticatable {
 
     public $timestamps = false;
 
-    // Automatically hash the user password
-    public function setPasswordAttribute($value) {
-        $this->attributes['password'] = Hash::make($value);
+    public function agent() {
+        return $this->belongsTo(User::class, 'agentId', 'userId');
     }
 }

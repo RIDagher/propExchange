@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->string('postalCode');
             $table->decimal('latitude', 9, 6);
             $table->decimal('longitude', 9, 6);
-            $table->unsignedBigInteger('ownerId')->index();
+            $table->unsignedBigInteger('ownerId')->default(null)->index();
             $table->unsignedBigInteger('agentId')->index();
             $table->boolean('isSold')->default(false)->index();
             $table->enum('propertyType', ['House', 'Condo', 'Cottage', 'Multiplex'])->index();

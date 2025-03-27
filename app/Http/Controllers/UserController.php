@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
  
 use App\Models\User;
+use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
  
-class UserController extends Controller
-{
+class UserController extends Controller {
+    
     // Register a new user
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
@@ -166,6 +167,33 @@ class UserController extends Controller
         }
     }
  
+    // Get a list of agents
+    public function searchAgents(Request $request) {
+        $query = User::where('role', 'agent');
+    
+        if ($request->has('username')) {
+            $query->where('username', 'like', '%' . $request->username . '%');
+        }
+        
+        $agents = $query->get();
+        
+        if ($request->ajax()) {
+            return response()->json($agents);
+        }
+        
+        return view('search-agents', compact('agents'));
+    }
+
+    public function showContactAgent($agentId) {
+        $agent = User::where('role', 'agent')->findOrFail($agentId);
+        $properties = Property::where('agentId', $agentId)->get();
+        
+        return view('contact-agent', [
+            'agent' => $agent,
+            'properties' => $properties
+        ]);
+    }
+
     // Show user profile
     public function show() {
         return view('profile.show', ['user' => Auth::user()]);

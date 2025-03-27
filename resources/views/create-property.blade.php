@@ -106,13 +106,18 @@
     </div>
 
     <div class="mb-3">
-      <label for="image" class="form-label">Upload Property Images</label>
-      <input type="file" class="form-control" name="images[]" accept="image/*" multiple>
+      <label for="agentId" class="form-label">Select Agent (Optional)</label>
+      <select class="form-select" name="agentId" id="agentId">
+          <option value="">-- No agent selected --</option>
+          @foreach($agents as $agent)
+              <option value="{{ $agent->userId }}" 
+                  {{ old('agentId') == $agent->userId ? 'selected' : '' }}>
+                  {{ $agent->username }} ({{ $agent->email }})
+              </option>
+          @endforeach
+      </select>
+      <div class="invalid-feedback" id="errorAgent"></div>
     </div>
-
-    <input type="hidden" name="ownerId" value="1">
-    <input type="hidden" name="agentId" value="2">
-    <input type="hidden" name="isSold" value="0">
 
     <button type="submit" class="btn btn-success">Add Property</button>
 

@@ -28,7 +28,7 @@ class PropertyController extends Controller
             'postalCode' => 'required|string|max:7|regex:/^[A-Z]\d[A-Z] \d[A-Z]\d$/i',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
-            'agentId' => 'required|exists:users,userId',
+            'agentId' => 'required|exists:users,userId,role,agent',
             'propertyType' => 'required|in:House,Condo,Cottage,Multiplex',
             'floors' => 'required|integer',
             'bedrooms' => 'required|integer',
@@ -53,13 +53,13 @@ class PropertyController extends Controller
     // Show property edit form
     public function edit($propertyId) {
         $property = Property::findOrFail($propertyId);
-        if (Auth::id() !== $property->ownerId) {
+        if (Auth::id() !== $property->agentId) {
             return back()->with('error', 'Unauthorized');
         }
 
-        return view('properties.edit', [
+        return view('edit-property', [
             'property' => $property,
-            'agents' => User::where('role', 'agent')->get()
+            'agent' => User::where('role', 'agent')->get()
         ]);
     }
     // Update a property
@@ -67,8 +67,8 @@ class PropertyController extends Controller
         $property = Property::findOrFail($propertyId);
         $user = Auth::user();
 
-        if ($user->userId !== $property->ownerId) {
-            return back()->with('error', 'You can only edit your own properties');
+        if ($user->userId !== $property->agentId) {
+            return back()->with('error', 'Only an agent can edit a property');
         }
 
         $validatedData = $request->validate([
@@ -105,7 +105,7 @@ class PropertyController extends Controller
     public function destroy($propertyId) {
         $property = Property::findOrFail($propertyId);
 
-        if (Auth::id() !== $property->ownerId) {
+        if (Auth::id() !== $property->agentId) {
             abort(403);
         }
 
@@ -129,12 +129,6 @@ class PropertyController extends Controller
     public function show($propertyId) {
         $property = Property::with(['agent', 'images'])->findOrFail($propertyId);
         return view('show-property', compact('property'));
-    }
-
-    // Get a list of agents
-    public function searchAgents() {
-        $agents = User::where('role', 'agent')->get();
-        return view('search-users-agents', ['agents' => $agents]);
     }
 
     // Show properties by user
@@ -166,8 +160,8 @@ class PropertyController extends Controller
     }
 
     // Search properties
-    public function search(Request $request)
-    {
+    public function search(Request $request) {
+        
         $query = property::query();
 
         if ($request->filled('city')) {
@@ -209,6 +203,45 @@ class PropertyController extends Controller
         $properties = $query->orderBy('createdAT', 'desc')->paginate(10);
 
         return view('search-properties', compact('properties'));
+    }
+
+    // Show add agent form
+    public function showAddAgentForm($propertyId) {
+        $property = Property::findOrFail($propertyId);
+        
+        if (Auth::id() !== $property->ownerId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $agents = User::where('role', 'agent')->get();
+        
+        return view('add-agent', [
+            'property' => $property,
+            'agents' => $agents
+        ]);
+    }
+
+    // Assign agent to property
+    public function addAgent(Request $request, $propertyId) {
+        $property = Property::findOrFail($propertyId);
+        
+        if (Auth::id() !== $property->ownerId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validatedData = $request->validate([
+            'agentId' => 'required|exists:users,userId,role,agent'
+        ]);
+
+        try {
+            $property->update(['agentId' => $validatedData['agentId']]);
+            
+            return redirect()->route('properties.my')
+                ->with('success', 'Agent added successfully!');
+                
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to add agent: ' . $e->getMessage());
+        }
     }
 
     // get all properties for map

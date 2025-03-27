@@ -117,30 +117,20 @@
                     <h5 class="mb-0">Contact Agent</h5>
                 </div>
                 <div class="card-body">
-                    @if($property->agent)
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="flex-shrink-0">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($property->agent->name) }}&background=random" 
-                                     class="rounded-circle" width="60" height="60">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5>{{ $property->agent->name }}</h5>
-                                <p class="text-muted mb-1">Real Estate Agent</p>
-                                <p class="mb-0"><i class="bi bi-telephone"></i> {{ $property->agent->phone ?? 'N/A' }}</p>
-                            </div>
-                        </div>
-                        <form>
+                    @if($property->agentId)
+                        <form method="POST" action="#">
+                            @csrf
                             <div class="mb-3">
-                                <input type="text" class="form-control" placeholder="Your Name">
+                                <input type="text" name="name" class="form-control" placeholder="Your Name" required>
                             </div>
                             <div class="mb-3">
-                                <input type="email" class="form-control" placeholder="Your Email">
+                                <input type="email" name="email" class="form-control" placeholder="Your Email" required>
                             </div>
                             <div class="mb-3">
-                                <input type="tel" class="form-control" placeholder="Your Phone">
+                                <input type="tel" name="phone" class="form-control" placeholder="Your Phone">
                             </div>
                             <div class="mb-3">
-                                <textarea class="form-control" rows="3" placeholder="Your Message"></textarea>
+                                <textarea name="message" class="form-control" rows="3" placeholder="Your Message" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Send Message</button>
                         </form>

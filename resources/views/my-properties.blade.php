@@ -5,9 +5,11 @@
 <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-5">
         <h1 class="display-5 fw-bold">My Properties</h1>
-        <a href="{{ route('properties.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Add New Property
-        </a>
+        @if(Auth::user()->role === 'client')
+            <a href="{{ route('properties.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Add New Property
+            </a>
+        @endif
     </div>
 
     @if(session('success'))
@@ -19,7 +21,12 @@
 
     @if($properties->isEmpty())
         <div class="alert alert-info">
-            You don't have any properties listed yet. <a href="{{ route('properties.create') }}" class="alert-link">Create your first property</a>.
+            @if(Auth::user()->role === 'client')
+                You don't have any properties listed yet. 
+                <a href="{{ route('properties.create') }}" class="alert-link">Create your first property</a>.
+            @else
+                You currently aren't managing any properties.
+            @endif
         </div>
     @else
         <div class="row g-4">
@@ -64,14 +71,25 @@
                             </div>
                             
                             <div class="mt-auto d-flex justify-content-between">
-                            <a href="{{ route('properties.show', $property->propertyId) }}" 
-                                   class="btn btn-sm btn-outline-primary">
+                                <a href="{{ route('properties.show', $property->propertyId) }}" 
+                                    class="btn btn-sm btn-outline-primary">
                                     View Property Details
                                 </a>
                                 <a href="{{ route('properties.images.create', $property->propertyId) }}" 
-                                   class="btn btn-sm btn-outline-secondary">
+                                    class="btn btn-sm btn-outline-secondary">
                                     Add Images
                                 </a>
+                                @if(Auth::user()->role === 'client')
+                                    <a href="{{ route('properties.agent.create', $property->propertyId) }}" 
+                                        class="btn btn-sm btn-outline-info">
+                                        Change Agent
+                                    </a>
+                                @else
+                                    <a href="{{ route('properties.edit', $property->propertyId) }}" 
+                                        class="btn btn-sm btn-outline-warning">
+                                        Edit
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
