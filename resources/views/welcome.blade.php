@@ -4,15 +4,15 @@
 @section('content')
 
     <!-- Hero -->
-    <section class="hero text-white text-center p-5">
-        <div class="container">
-            <h1>Find Your Dream Home</h1>
-            <p>Browse for properties for sale or rent</p>
-            <div class="postion-relative w-50 mx-auto">
-                <input type="text" id="search-input" class="form-control" placeholder="Search for properties..." autocomplete="off">
-                <div id="search-results" class="list-group position-absolute w-100 shadow bg-white"></div>
-            </div>
-        </div>
+    <section id="hero" class="hero text-white text-center p-5">
+    <div class="container">
+        <h1>Find Your Dream Home</h1>
+        <p>Browse for properties for sale or rent</p>
+        <form method="GET" action="{{ route('search-properties') }}" class="position-relative w-50 mx-auto">
+            <input type="text" name="city" id="search-input" class="form-control" placeholder="Enter city..." autocomplete="off">
+            <button type="submit" class="btn btn-light btn-block mt-3">Search</button>       
+        </form>
+    </div>
     </section>
     
     <!-- Info -->

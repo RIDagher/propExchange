@@ -32,9 +32,6 @@ Route::get('/search-properties', [PropertyController::class, 'search'])->name('s
 Route::get('/map-properties', [PropertyController::class, 'mapView'])->name('map-properties');
 Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
 
-Route::get('/map-properties', function () {
-    return view('map-properties');
-})->name('map-properties');
 
 Route::get('/search-agents', function () {
     return view('search-agents');
