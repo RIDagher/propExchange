@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">PropExchange</a>
-                <div id="navbar" class="collapse navbar-collapse">
+                <div id="navbar" class="navbar-collapse">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link btn btn-link" href="{{ url('/') }}">Home</a>
@@ -36,7 +36,7 @@
                         @auth
                         @if(Auth::user()->role === 'client')
                             <li class="nav-item">
-                                <a class="nav-link btn btn-link" href="{{ route('create') }}">
+                                <a class="nav-link btn btn-link" href="{{ route('properties.create') }}">
                                     <i class="bi bi-plus-circle"></i> List New Property
                                 </a>
                             </li>
@@ -60,7 +60,7 @@
                             <a href="{{ route('login') }}" class="nav-link btn btn-link">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('register.submit') }}" class="nav-link btn btn-link">Register</a>
+                            <a href="{{ route('register') }}" class="nav-link btn btn-link">Register</a>
                         </li>
                         @endauth
                     </ul>

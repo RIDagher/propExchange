@@ -11,7 +11,7 @@ class PropertyImage extends Model {
     protected $primaryKey = 'imageId';
 
     protected $fillable = [
-        'propertyId', 'imagePath', 'mainImage'
+        'propertyId', 'imagePath', 'isMain'
     ];
 
     public $timestamps = false;

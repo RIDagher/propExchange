@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PropertyImageController;
+use App\Http\Controllers\SocialAuthController;
 
 // Get CSRF token to pass for other postman request
 Route::get('/csrf-token', function () {
@@ -11,7 +12,6 @@ Route::get('/csrf-token', function () {
         'csrf_token' => csrf_token(),
     ]);
 });
-
 
 // Views
 Route::get('/', function () {
@@ -35,6 +35,10 @@ Route::get('/properties/{property}', [PropertyController::class, 'show'])->name(
 Route::post('/register', [UserController::class, 'register'])->name('register.submit');
 Route::post('/login', [UserController::class, 'login'])->name('login.submit');
 
+// Google authentication
+Route::get('/login/google', [SocialAuthController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('/login/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+
 // Protected routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
@@ -47,7 +51,7 @@ Route::middleware('auth')->group(function () {
 
     // Property management routes
     Route::get('/my-properties', [PropertyController::class, 'myProperties'])->name('properties.my');
-    Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
+    Route::get('/create-property', [PropertyController::class, 'create'])->name('properties.create');
     Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
     Route::get('/properties/{property}/edit', [PropertyController::class, 'edit'])->name('properties.edit');
     Route::post('/properties/{property}/update', [PropertyController::class, 'update'])->name('properties.update');

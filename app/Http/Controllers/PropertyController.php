@@ -12,7 +12,7 @@ class PropertyController extends Controller
 
     // Show property creation form
     public function create() {
-        return view('properties.create', [
+        return view('create-property', [
             'agents' => User::where('role', 'agent')->get()
         ]);
     }
@@ -127,9 +127,8 @@ class PropertyController extends Controller
 
     // Show single property
     public function show($propertyId) {
-        return view('properties.show', [
-            'property' => Property::findOrFail($propertyId)
-        ]);
+        $property = Property::with(['agent', 'images'])->findOrFail($propertyId);
+        return view('show-property', compact('property'));
     }
 
     // Get a list of agents
