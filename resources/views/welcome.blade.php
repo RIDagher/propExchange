@@ -4,13 +4,13 @@
 @section('content')
 
     <!-- Hero -->
-    <section id="hero" class="hero text-white text-center p-5">
+    <section id="hero" class="hero text-white text-center p-5" style="background: url('storage/images/hero-bg.jpg') no-repeat center center; background-size: cover;">
     <div class="container">
-        <h1>Find Your Dream Home</h1>
-        <p>Browse for properties for sale or rent</p>
+        <h1 class="text-shadow">Find Your Dream Home</h1>
+        <p class="text-shadow">Browse for properties for sale or rent</p>
         <form method="GET" action="{{ route('search-properties') }}" class="position-relative w-50 mx-auto">
-            <input type="text" name="city" id="search-input" class="form-control" placeholder="Enter city..." autocomplete="off">
-            <button type="submit" class="btn btn-light btn-block mt-3">Search</button>       
+            <input type="text" name="city" id="search-input" class="form-control shadow" placeholder="Enter city..." autocomplete="off">
+            <button type="submit" class="btn btn-light btn-block mt-3 shadow">Search</button>
         </form>
     </div>
     </section>
@@ -48,36 +48,40 @@
                 <div class="col-md-3 mb-4">
                     <div class="card shadow">
                         <div class="card-body">
-                            <h5 class="card-title">Houses</h5>
+                        <img src="{{ asset('storage/images/house-card.jpg') }}" class="card-img-top" alt="House Card" style="height: 180px;">
+                            <h5 class="card-title mt-3">Houses</h5>
                             <p class="card-text">Browse houses available for sale or for rent.</p>
-                            <a href="#" class="btn">Search Houses</a>
+                            <a href="{{ route('search-properties', ['type' => 'house']) }}" class="btn">Search Houses</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="card shadow">
                         <div class="card-body">
-                            <h5 class="card-title">Condo</h5>
+                        <img src="{{ asset('storage/images/condo-card.jpg') }}" class="card-img-top w" alt="Condo Card" style="height: 180px;">
+                            <h5 class="card-title mt-3">Condo</h5>
                             <p class="card-text">Browse condos available for sale or for rent.</p>
-                            <a href="#" class="btn">Search Condos</a>
+                            <a href="{{ route('search-properties', ['type' => 'condo']) }}" class="btn">Search Condos</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="card shadow">
                         <div class="card-body">
-                            <h5 class="card-title">Cottage</h5>
+                        <img src="{{ asset('storage/images/cottage-card.jpeg') }}" class="card-img-top" alt="Cottage Card" style="height: 180px;">
+                            <h5 class="card-title mt-3">Cottage</h5>
                             <p class="card-text">Browse cottages available for sale or for rent.</p>
-                            <a href="#" class="btn">Search Cottages</a>
+                            <a href="{{ route('search-properties', ['type' => 'cottage']) }}" class="btn">Search Cottages</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="card shadow">
                         <div class="card-body">
-                            <h5 class="card-title">Multiplex</h5>
+                        <img src="{{ asset('storage/images/multiplex-card.jpg') }}" class="card-img-top" alt="Multiplex Card" style="height: 180px;"> 
+                            <h5 class="card-title mt-3">Multiplex</h5>
                             <p class="card-text">Browse multiplexes available for sale or for rent.</p>
-                            <a href="#" class="btn">Search Multiplexes</a>
+                            <a href="{{ route('search-properties', ['type' => 'multiplex']) }}" class="btn">Search Multiplexes</a>
                         </div>
                     </div>
                 </div>
