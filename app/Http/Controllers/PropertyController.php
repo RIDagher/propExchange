@@ -219,4 +219,16 @@ class PropertyController extends Controller
             'properties' => $properties
         ]);
     }
+
+    // Landing search bar
+    public function landingSearch(Request $request) {
+        
+        $keyword = $request->input('keyword');
+
+        $properties = Property::where('city', 'like', "%{keyword}%")
+                            ->orderBy('createdAT', 'desc')
+                            ->paginate(10);
+
+        return view('landing-search-results', compact('properties'));        
+    }
 }

@@ -29,7 +29,7 @@
                             <a class="nav-link btn btn-link" href="{{ route('search-properties') }}">Find a Property</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn btn-link" href="#">Find a Realtor</a>
+                            <a class="nav-link btn btn-link" href="{{ route('search-agents') }}">Find a Realtor</a>
                         </li>
                     </ul>
 
