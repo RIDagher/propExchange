@@ -64,6 +64,10 @@
                             </div>
                             
                             <div class="mt-auto d-flex justify-content-between">
+                            <a href="{{ route('properties.show', $property->propertyId) }}" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    View Property Details
+                                </a>
                                 <a href="{{ route('properties.images.create', $property->propertyId) }}" 
                                    class="btn btn-sm btn-outline-secondary">
                                     Add Images

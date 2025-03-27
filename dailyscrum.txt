@@ -148,7 +148,7 @@ Todo:
 -Implement login with google and facebook 
 
 
-2025/3/24 David Demers
+2025/3/25 David Demers
 Completed:
 -Change routes to work with views
 -Change controller to return data instead of json
@@ -159,15 +159,41 @@ Todo:
 -Create properties.blade.php
 -Test image upload
 
-2025/3/24 Louis Chartier
+2025/3/25 Louis Chartier
 Completed:
 -Almost done google sign in and facebook sign in
 Todo:
 -Test google sign and facebook sign in
 
-2025/3/21 Rima Dagher
+2025/3/25 Rima Dagher
 Completed:
 -Create property form with validation
 -Almost done search properties
 Todo:
 -Get all properties and map to google map
+
+
+2025/3/26 David Demers
+Completed:
+-Completed show property page
+-Completed my-properties page
+-Completed and tested upload image to property page
+Todo:
+-Complete search realtor function
+-Add realtor search selection in create property form
+
+2025/3/26 Louis Chartier
+Completed:
+-Completed google login
+-Almost done agent search page
+Todo:
+-Finalize agent search page
+-Finalize home page
+
+2025/3/26 Rima Dagher
+Completed:
+-Search properties fully functional
+-Locating properties on map finalized
+Todo:
+-Add a bit of validation to creation form
+-Try to make french version for website
