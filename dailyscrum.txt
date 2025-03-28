@@ -197,3 +197,24 @@ Completed:
 Todo:
 -Add a bit of validation to creation form
 -Try to make french version for website
+
+
+2025/3/27 David Demers
+Completed:
+-Completed edit-property page
+-Completed add-agent page
+-Helped upload project to hosting website
+Todo:
+
+2025/3/26 Louis Chartier
+Completed:
+-Finalized welcome page
+-Called local images for welcome page
+-Helped upload project to hosting website
+Todo:
+
+2025/3/26 Rima Dagher
+Completed:
+-Search properties full validation
+-Helped upload project to hosting website
+Todo:

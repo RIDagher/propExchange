@@ -119,7 +119,7 @@
       <div class="invalid-feedback" id="errorAgent"></div>
     </div>
 
-    <button type="submit" class="btn btn-success">Add Property</button>
+    <button type="submit" class="btn btn-success my-3">Add Property</button>
 
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
       <div id="successToast" class="toast align-items-center text-bg-success border 0" role="alert" aria-live="assertive" aria-atomic="true">

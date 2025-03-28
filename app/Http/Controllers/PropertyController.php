@@ -19,8 +19,8 @@ class PropertyController extends Controller
     // Create a property
     public function store(Request $request) {
         $validatedData = $request->validate([
-            'title' => 'required|string|regex:/^[a-zA-Z0-9! -]{1,255}$/',
-            'description' => 'required|string|regex:/^[a-zA-Z0-9.!@ -]+$/',
+            'title' => 'required|string|regex:/^[a-zA-Z0-9,! -]{1,255}$/',
+            'description' => 'required|string|regex:/^[a-zA-Z0-9,.!@ -]+$/',
             'price' => 'required|numeric|regex:/^\d{1,10}([.,]\d{2})?$/',
             'address' => 'required|string|max:255|regex:/^\d{1,5}\s[A-Za-z\s\-.]+$/',
             'city' => 'required|string|max:100|regex:/^[A-Za-z\s\-.]+$/',
@@ -72,8 +72,8 @@ class PropertyController extends Controller
         }
 
         $validatedData = $request->validate([
-            'title' => 'sometimes|string|regex:/^[a-zA-Z0-9! -]{1,255}$/',
-            'description' => 'sometimes|string|regex:/^[a-zA-Z0-9.!@ -]+$/',
+            'title' => 'sometimes|string|regex:/^[a-zA-Z0-9,! -]{1,255}$/',
+            'description' => 'sometimes|string|regex:/^[a-zA-Z0-9,.!@ -]+$/',
             'price' => 'sometimes|numeric|regex:/^\d{1,10}([.,]\d{2})?$/',
             'address' => 'sometimes|string|max:255|regex:/^\d{1,5}\s[A-Za-z\s\-.]+$/',
             'city' => 'sometimes|string|max:100|regex:/^[A-Za-z\s\-.]+$/',
