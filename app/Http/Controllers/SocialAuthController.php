@@ -29,7 +29,7 @@ class SocialAuthController extends Controller
             );
             Auth::login($user);
             return redirect()->intended('/')->with('success', 'Login successful!');
-        } catch (\Exception $e) {
+        } catch (\Exception $error) {
             return redirect('/login')->with('error', 'Unable to login using Google');
         }
     }

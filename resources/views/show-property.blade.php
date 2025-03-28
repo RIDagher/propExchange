@@ -12,11 +12,11 @@
             <div class="property-images mb-4">
                 <div id="propertyCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner rounded">
-                        @foreach($property->images as $key => $image)
-                        <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+                        @foreach($property->images as $num => $image)
+                        <div class="carousel-item {{ $num === 0 ? 'active' : '' }}">
                             <img src="{{ asset('storage/' . $image->imagePath) }}" 
                                  class="d-block w-100" 
-                                 alt="Property image {{ $key + 1 }}"
+                                 alt="Property image {{ $num + 1 }}"
                                  style="max-height: 500px; object-fit: cover;">
                         </div>
                         @endforeach
@@ -35,12 +35,12 @@
                 
                 @if($property->images->count() > 1)
                 <div class="d-flex flex-wrap mt-2">
-                    @foreach($property->images as $key => $image)
+                    @foreach($property->images as $num => $image)
                     <img src="{{ asset('storage/' . $image->imagePath) }}" 
                         class="img-thumbnail me-2 mb-2" 
                         style="width: 80px; height: 60px; cursor: pointer; object-fit: cover;"
-                        onclick="jumpToSlide({{ $key }})"
-                        alt="Thumbnail {{ $key + 1 }}"
+                        onclick="jumpToSlide({{ $num }})"
+                        alt="Thumbnail {{ $num + 1 }}"
                         data-bs-target="#propertyCarousel">
                     @endforeach
                 </div>

@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Validator;
 
 class PropertyImageController extends Controller {
 
+    // Return add-image view
     public function create($propertyId) {
         return view('add-image', [
             'property' => Property::findOrFail($propertyId)
         ]);
     }
-
+    // Add image to folder (must create symbolic link in cmd so only works locally)
     public function store(Request $request, $propertyId) {
         $property = Property::findOrFail($propertyId);
         
@@ -53,13 +54,14 @@ class PropertyImageController extends Controller {
             return redirect()->route('properties.my')
                 ->with('success', 'Image uploaded successfully!');
 
-        } catch (\Exception $e) {
+        } catch (\Exception $error) {
             return redirect()->back()
-                ->with('error', 'Failed to upload image: '.$e->getMessage())
+                ->with('error', 'Failed to upload image: '.$error->getMessage())
                 ->withInput();
         }
     }
 
+    // Delete an image
     public function destroy($imageId) {
         try {
             $image = PropertyImage::findOrFail($imageId);
@@ -70,8 +72,8 @@ class PropertyImageController extends Controller {
             
             return back()->with('success', 'Image deleted successfully');
             
-        } catch (\Exception $e) {
-            return back()->with('error', 'Failed to delete image: '.$e->getMessage());
+        } catch (\Exception $error) {
+            return back()->with('error', 'Failed to delete image: '.$error->getMessage());
         }
     }
 }

@@ -73,16 +73,16 @@
 @section('scripts')
 <script>
     // Image preview
-    document.getElementById('image').addEventListener('change', function(e) {
+    document.getElementById('image').addEventListener('change', function(upload) {
         const previewContainer = document.getElementById('imagePreviewContainer');
         const preview = document.getElementById('imagePreview');
-        const file = e.target.files[0];
+        const file = upload.target.files[0];
         
         if (file) {
             const reader = new FileReader();
             
-            reader.onload = function(e) {
-                preview.src = e.target.result;
+            reader.onload = function(upload) {
+                preview.src = upload.target.result;
                 preview.classList.remove('d-none');
                 previewContainer.classList.remove('d-none');
             }

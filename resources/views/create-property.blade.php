@@ -3,6 +3,9 @@
 @section('title', 'Login - PropExchange')
 
 @section('content')
+@if(Auth::user()->role === 'agent')
+  <script>window.location.href = "{{ route('properties.my') }}";</script>
+@endif
 <div class="container mt-4">
   <h1 class="text-center">Add a property</h1>
 
@@ -110,8 +113,7 @@
       <select class="form-select" name="agentId" id="agentId">
           <option value="">-- No agent selected --</option>
           @foreach($agents as $agent)
-              <option value="{{ $agent->userId }}" 
-                  {{ old('agentId') == $agent->userId ? 'selected' : '' }}>
+              <option value="{{ $agent->userId }}">
                   {{ $agent->username }} ({{ $agent->email }})
               </option>
           @endforeach

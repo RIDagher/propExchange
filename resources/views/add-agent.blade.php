@@ -29,8 +29,7 @@
                                     id="agentId" name="agentId" required>
                                 <option value="">-- Select an Agent --</option>
                                 @foreach($agents as $agent)
-                                    <option value="{{ $agent->userId }}" 
-                                        {{ old('agentId') == $agent->userId ? 'selected' : '' }}>
+                                    <option value="{{ $agent->userId }}">
                                         {{ $agent->username }} ({{ $agent->email }})
                                     </option>
                                 @endforeach

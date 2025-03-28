@@ -7,8 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PropertyController extends Controller
-{
+class PropertyController extends Controller {
 
     // Show property creation form
     public function create() {
@@ -45,7 +44,7 @@ class PropertyController extends Controller
             Property::create($validatedData);
             return redirect()->route('properties.my')
                 ->with('success', 'Property created successfully!');
-        } catch (\Exception $e) {
+        } catch (\Exception $error) {
             return back()->with('error', 'Failed to create property')->withInput();
         }
     }
@@ -54,7 +53,7 @@ class PropertyController extends Controller
     public function edit($propertyId) {
         $property = Property::findOrFail($propertyId);
         if (Auth::id() !== $property->agentId) {
-            return back()->with('error', 'Unauthorized');
+            return back()->with('error', 'Unauthorized Action');
         }
 
         return view('edit-property', [
@@ -96,7 +95,7 @@ class PropertyController extends Controller
             $property->update($validatedData);
             return redirect()->route('properties.show', $propertyId)
                 ->with('success', 'Property updated successfully!');
-        } catch (\Exception $e) {
+        } catch (\Exception $error) {
             return back()->with('error', 'Failed to update property')->withInput();
         }
     }
@@ -113,7 +112,7 @@ class PropertyController extends Controller
             $property->delete();
             return redirect()->route('properties.my')
                 ->with('success', 'Property deleted successfully!');
-        } catch (\Exception $e) {
+        } catch (\Exception $error) {
             return back()->with('error', 'Failed to delete property');
         }
     }
@@ -200,7 +199,7 @@ class PropertyController extends Controller
             $query->where('isGarage', true);
         }
 
-        $properties = $query->orderBy('createdAT', 'desc')->paginate(10);
+        $properties = $query->orderBy('createdAt', 'desc')->paginate(10);
 
         return view('search-properties', compact('properties'));
     }
@@ -239,8 +238,8 @@ class PropertyController extends Controller
             return redirect()->route('properties.my')
                 ->with('success', 'Agent added successfully!');
                 
-        } catch (\Exception $e) {
-            return back()->with('error', 'Failed to add agent: ' . $e->getMessage());
+        } catch (\Exception $error) {
+            return back()->with('error', 'Failed to add agent: ' . $error->getMessage());
         }
     }
 
@@ -259,7 +258,7 @@ class PropertyController extends Controller
         $keyword = $request->input('keyword');
 
         $properties = Property::where('city', 'like', "%{keyword}%")
-                            ->orderBy('createdAT', 'desc')
+                            ->orderBy('createdAt', 'desc')
                             ->paginate(10);
 
         return view('landing-search-results', compact('properties'));        
