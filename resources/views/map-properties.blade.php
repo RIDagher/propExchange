@@ -67,5 +67,5 @@
 
 
 <!-- Load Google Maps API -->
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSoL_nhXPC7ACkJCDxqNdyWRYwIcEeBtI&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap"></script>
 @endsection
