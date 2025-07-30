@@ -1,10 +1,20 @@
+# services:
+#   - type: web
+#     name: propexchange
+#     env: docker
+#     plan: free
+#     rootDir: .             #
+#     domains:
+#       - propexchange.rimadagher.ca
+#     buildCommand: ""
+#     startCommand: "apache2-foreground"
+
 services:
   - type: web
     name: propexchange
     env: docker
     plan: free
-    rootDir: .             #
-    domains:
-      - propexchange.rimadagher.ca
-    buildCommand: ""
+    buildCommand: "./render-build.sh"
     startCommand: "apache2-foreground"
+    domains:
+      - propexchange.rimadagher.dev
