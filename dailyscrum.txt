@@ -218,3 +218,5 @@ Completed:
 -Search properties full validation
 -Helped upload project to hosting website
 Todo:
+
+ <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
