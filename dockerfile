@@ -9,6 +9,12 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache rewrite module
 RUN a2enmod rewrite
 
+# Change Apache DocumentRoot to Laravel's public directory
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+
+# Update Apache config to use new DocumentRoot
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
+
 # Copy Laravel project into the container
 COPY . /var/www/html
 
