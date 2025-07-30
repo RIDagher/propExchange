@@ -4,7 +4,7 @@
 @section('content')
 
     <!-- Hero -->
-    <section id="hero" class="hero text-white text-center p-5" style="background: url('storage/images/hero-bg.jpg') no-repeat center center; background-size: cover;">
+    <section id="hero" class="hero text-white text-center p-5" style="background: url('images/hero.jpg') no-repeat center center; background-size: cover;">
     <div class="container">
         <h1 class="text-shadow">Find Your Dream Home</h1>
         <p class="text-shadow">Browse for properties for sale or rent</p>
@@ -48,7 +48,7 @@
                 <div class="col-md-3 mb-4">
                     <div class="card shadow">
                         <div class="card-body">
-                        <img src="{{ asset('storage/images/house-card.jpg') }}" class="card-img-top" alt="House Card" style="height: 180px;">
+                        <img src="{{ asset('images/laval-house.jpg') }}" class="card-img-top" alt="House Card" style="height: 180px;">
                             <h5 class="card-title mt-3">Houses</h5>
                             <p class="card-text">Browse houses available for sale or for rent.</p>
                             <a href="{{ route('search-properties', ['type' => 'house']) }}" class="btn">Search Houses</a>
@@ -58,7 +58,7 @@
                 <div class="col-md-3 mb-4">
                     <div class="card shadow">
                         <div class="card-body">
-                        <img src="{{ asset('storage/images/condo-card.jpg') }}" class="card-img-top w" alt="Condo Card" style="height: 180px;">
+                        <img src="{{ asset('images/montreal.jpg') }}" class="card-img-top w" alt="Condo Card" style="height: 180px;">
                             <h5 class="card-title mt-3">Condo</h5>
                             <p class="card-text">Browse condos available for sale or for rent.</p>
                             <a href="{{ route('search-properties', ['type' => 'condo']) }}" class="btn">Search Condos</a>
@@ -68,7 +68,7 @@
                 <div class="col-md-3 mb-4">
                     <div class="card shadow">
                         <div class="card-body">
-                        <img src="{{ asset('storage/images/cottage-card.jpeg') }}" class="card-img-top" alt="Cottage Card" style="height: 180px;">
+                        <img src="{{ asset('images/mont-tremblant.jpg') }}" class="card-img-top" alt="Cottage Card" style="height: 180px;">
                             <h5 class="card-title mt-3">Cottage</h5>
                             <p class="card-text">Browse cottages available for sale or for rent.</p>
                             <a href="{{ route('search-properties', ['type' => 'cottage']) }}" class="btn">Search Cottages</a>
@@ -78,7 +78,7 @@
                 <div class="col-md-3 mb-4">
                     <div class="card shadow">
                         <div class="card-body">
-                        <img src="{{ asset('storage/images/multiplex-card.jpg') }}" class="card-img-top" alt="Multiplex Card" style="height: 180px;"> 
+                        <img src="{{ asset('images/multiplex-long.jpg') }}" class="card-img-top" alt="Multiplex Card" style="height: 180px;"> 
                             <h5 class="card-title mt-3">Multiplex</h5>
                             <p class="card-text">Browse multiplexes available for sale or for rent.</p>
                             <a href="{{ route('search-properties', ['type' => 'multiplex']) }}" class="btn">Search Multiplexes</a>

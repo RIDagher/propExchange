@@ -1,3 +1,4 @@
+console.log("🔥 createUser.js loaded!");
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById("register-form");
 
