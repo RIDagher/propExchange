@@ -3,6 +3,7 @@ services:
     name: propexchange
     env: docker
     plan: free
+    rootDir: .             #
     domains:
       - propexchange.rimadagher.ca
     buildCommand: ""
