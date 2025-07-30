@@ -85,14 +85,14 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
+
 # Install Node.js and build assets
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
     npm install && \
     npm run build
-
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
 
 # Expose port
 EXPOSE 80
