@@ -94,5 +94,12 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     npm install && \
     npm run build
 
+# Clear Laravel caches
+RUN php artisan config:clear && \
+    php artisan route:clear && \
+    php artisan view:clear && \
+    php artisan cache:clear && \
+    php artisan optimize:clear
+
 # Expose port
 EXPOSE 80
