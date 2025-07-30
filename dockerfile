@@ -32,6 +32,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
+# Create the symbolic link for storage
+RUN php artisan storage:link
+
+
 # Expose port 80
 EXPOSE 80
 

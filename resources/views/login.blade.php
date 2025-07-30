@@ -75,7 +75,7 @@
         }
     });
     </script>
-@vite(['resources/js/loginUser.js'])
+<script src="{{ asset('js/loginUser.js') }}" defer></script>
 @endsection
 
     

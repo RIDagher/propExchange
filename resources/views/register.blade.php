@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
-@vite(['resources/js/createUser.js'])
+<script src="{{ asset('js/createUser.js') }}" defer></script>
 @endsection
 
 
