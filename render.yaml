@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: propexchange
+    env: docker
+    plan: free
+    domains:
+      - propexchange.rimadagher.ca
+    buildCommand: ""
+    startCommand: "apache2-foreground"
