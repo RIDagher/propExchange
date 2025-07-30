@@ -64,3 +64,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/properties/{property}/images', [PropertyImageController::class, 'store'])->name('properties.images.store');
     Route::post('/images/{image}/delete', [PropertyImageController::class, 'destroy'])->name('properties.images.destroy');
 });
+
+Route::get('/debug-log', function () {
+    return response()->file(storage_path('logs/laravel.log'));
+});
