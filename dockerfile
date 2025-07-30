@@ -22,8 +22,9 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 
 # Set correct permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+# Set correct permissions for Laravel
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
