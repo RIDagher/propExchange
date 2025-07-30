@@ -20,53 +20,53 @@ body {
 }
 
 .navbar {
-    background-color: #DD1D2E;
+    background-color: #DD1D2E !important;
 }
 
 .footer {
-    background-color: #DD1D2E;
+    background-color: #DD1D2E !important;
 }
 
 .hero {
-    background-color: #003DA5;
+    background-color: #003DA5 !important;
 }
 
 .info-section h2 {
-    margin-bottom: 0.1rem;
+    margin-bottom: 0.1rem !important;
 }
 
 .info-section p {
-    margin-top: 0;
+    margin-top: 0 !important;
 }
 
 .property-cards {
-    background-color: #003DA5;
+    background-color: #003DA5 !important;
 }
 
 .property-cards a {
-    background-color: #003DA5;
-    color: white;
-    transition: ease 0.3s;
+    background-color: #003DA5 !important;
+    color: white !important;
+    transition: ease 0.3s !important;
 }
 
 .property-cards a:hover {
-    background-color: #014fd6;
-    color: white;
+    background-color: #014fd6 !important;
+    color: white !important;
 }
 
 #login-form {
-    width: 500px;
-    border-radius: 5px;
-    margin: 150px;
+    width: 500px !important;
+    border-radius: 5px !important;
+    margin: 150px !important;
 }
 
 #login-btn {
-    background-color: #003DA5;
-    border: none;
+    background-color: #003DA5 !important;
+    border: none !important;
 }
 
 #login-btn:hover {
-    background-color: #014fd6;
+    background-color: #014fd6 !important;
 }
 
 #register-form {
