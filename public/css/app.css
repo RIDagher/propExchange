@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* Azure: #007FFF */
+
+body {
+    margin: 0;
+}
+
+.navbar {
+    background-color: #DD1D2E;
+}
+
+.footer {
+    background-color: #DD1D2E;
+}
+
+.hero {
+    background-color: #003DA5;
+}
+
+.info-section h2 {
+    margin-bottom: 0.1rem;
+}
+
+.info-section p {
+    margin-top: 0;
+}
+
+.property-cards {
+    background-color: #003DA5;
+}
+
+.property-cards a {
+    background-color: #003DA5;
+    color: white;
+    transition: ease 0.3s;
+}
+
+.property-cards a:hover {
+    background-color: #014fd6;
+    color: white;
+}
+
+#login-form {
+    width: 500px;
+    border-radius: 5px;
+    margin: 150px;
+}
+
+#login-btn {
+    background-color: #003DA5;
+    border: none;
+}
+
+#login-btn:hover {
+    background-color: #014fd6;
+}
+
+#register-form {
+    width: 500px;
+    border-radius: 5px;
+    margin: 110px;
+}
+
+#register-btn {
+    background-color: #003DA5;
+    border: none;
+}
+
+#register-btn:hover {
+    background-color: #014fd6;
+}
+
+
+#search-results {
+    display: none;
+    z-index: 1000;
+}
+
+#logout-bnt{
+    padding: 0;
+    border: none;
+}
+
+.btn-link:focus, #logout-bnt:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+#agent-container {
+    margin-bottom: 200px;
+}
+
+
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
