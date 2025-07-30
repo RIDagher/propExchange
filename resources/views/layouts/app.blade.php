@@ -21,6 +21,102 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     
+    <style>
+        /* Your styles here */
+             body {
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: #DD1D2E !important;
+        }
+
+        .footer {
+            background-color: #DD1D2E !important;
+        }
+
+        .hero {
+            background-color: #003DA5 !important;
+        }
+
+        .info-section h2 {
+            margin-bottom: 0.1rem !important;
+        }
+
+        .info-section p {
+            margin-top: 0 !important;
+        }
+
+        .property-cards {
+            background-color: #003DA5 !important;
+        }
+
+        .property-cards a {
+            background-color: #003DA5 !important;
+            color: white !important;
+            transition: ease 0.3s !important;
+        }
+
+        .property-cards a:hover {
+            background-color: #014fd6 !important;
+            color: white !important;
+        }
+
+        #login-form {
+            width: 500px !important;
+            border-radius: 5px !important;
+            margin: 150px !important;
+        }
+
+        #login-btn {
+            background-color: #003DA5 !important;
+            border: none !important;
+        }
+
+        #login-btn:hover {
+            background-color: #014fd6 !important;
+        }
+
+        #register-form {
+            width: 500px;
+            border-radius: 5px;
+            margin: 110px;
+        }
+
+        #register-btn {
+            background-color: #003DA5;
+            border: none;
+        }
+
+        #register-btn:hover {
+            background-color: #014fd6;
+        }
+
+        #search-results {
+            display: none;
+            z-index: 1000;
+        }
+
+        #logout-bnt {
+            padding: 0;
+            border: none;
+        }
+
+        .btn-link:focus,
+        #logout-bnt:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        #agent-container {
+            margin-bottom: 200px;
+        }
+
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+
 </head>
 <body>
     <!-- Navbar -->
@@ -101,6 +197,7 @@
     </div>
 
     @yield('scripts')
+    
     
 </body>
 </html>
