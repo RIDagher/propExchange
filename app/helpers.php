@@ -7,12 +7,14 @@ if (!function_exists('image_url')) {
      * Generate the correct URL for an image based on the environment
      */
     function image_url($imagePath) {
-        // For production deployments (like Render),  the app URL + storage path
+        // Always use asset helper for consistency and proper URL generation
+        $url = asset('storage/' . $imagePath);
+        
+        // Ensure HTTPS in production
         if (config('app.env') === 'production') {
-            return config('app.url') . '/storage/' . $imagePath;
+            $url = str_replace('http://', 'https://', $url);
         }
         
-        // For local development,  asset helper
-        return asset('storage/' . $imagePath);
+        return $url;
     }
 }

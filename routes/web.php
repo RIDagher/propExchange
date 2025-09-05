@@ -68,3 +68,30 @@ Route::middleware('auth')->group(function () {
 Route::get('/debug-log', function () {
     return response()->file(storage_path('logs/laravel.log'));
 });
+
+// Diagnostic route for debugging storage and images
+Route::get('/debug-storage', function () {
+    $data = [
+        'app_env' => config('app.env'),
+        'app_url' => config('app.url'),
+        'storage_link_exists' => is_link(public_path('storage')),
+        'storage_target' => readlink(public_path('storage')),
+        'public_storage_exists' => file_exists(public_path('storage')),
+        'storage_app_public_exists' => file_exists(storage_path('app/public')),
+        'property_images_dir_exists' => file_exists(storage_path('app/public/property_images')),
+        'sample_image_urls' => []
+    ];
+    
+    // Get a few sample images to test URLs
+    $images = \App\Models\PropertyImage::take(3)->get();
+    foreach ($images as $image) {
+        $data['sample_image_urls'][] = [
+            'image_path' => $image->imagePath,
+            'asset_url' => asset('storage/' . $image->imagePath),
+            'image_url_helper' => image_url($image->imagePath),
+            'file_exists' => file_exists(storage_path('app/public/' . $image->imagePath))
+        ];
+    }
+    
+    return response()->json($data, 200, [], JSON_PRETTY_PRINT);
+});
