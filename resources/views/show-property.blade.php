@@ -14,7 +14,7 @@
                     <div class="carousel-inner rounded">
                         @foreach($property->images as $num => $image)
                         <div class="carousel-item {{ $num === 0 ? 'active' : '' }}">
-                            <img src="{{ asset('storage/' . $image->imagePath) }}" 
+                            <img src="{{ image_url($image->imagePath) }}" 
                                  class="d-block w-100" 
                                  alt="Property image {{ $num + 1 }}"
                                  style="max-height: 500px; object-fit: cover;">
@@ -36,7 +36,7 @@
                 @if($property->images->count() > 1)
                 <div class="d-flex flex-wrap mt-2">
                     @foreach($property->images as $num => $image)
-                    <img src="{{ asset('storage/' . $image->imagePath) }}" 
+                    <img src="{{ image_url($image->imagePath) }}" 
                         class="img-thumbnail me-2 mb-2" 
                         style="width: 80px; height: 60px; cursor: pointer; object-fit: cover;"
                         onclick="jumpToSlide({{ $num }})"

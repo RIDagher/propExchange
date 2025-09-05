@@ -86,7 +86,7 @@
     <div class="col-md-4 mb-4">
       <div class="card h-100 bg-light p-4 rounded shadow">
           @if($property->images->first())
-              <img src="{{ asset('storage/' . $property->images->first()->imagePath) }}" class="card-img-top" alt="{{ $property->title }}">
+              <img src="{{ image_url($property->images->first()->imagePath) }}" class="card-img-top" alt="{{ $property->title }}">
           @else
             <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
               No Image Available

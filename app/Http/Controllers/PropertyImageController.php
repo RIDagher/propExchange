@@ -16,7 +16,7 @@ class PropertyImageController extends Controller {
             'property' => Property::findOrFail($propertyId)
         ]);
     }
-    // Add image to folder (must create symbolic link in cmd so only works locally)
+    // Add image to folder (works locally and in production with cloud storage)
     public function store(Request $request, $propertyId) {
         $property = Property::findOrFail($propertyId);
         
@@ -37,6 +37,7 @@ class PropertyImageController extends Controller {
             // Generate unique filename based on the current time
             $filename = time().'_'.$propertyId.'.'.$image->getClientOriginalExtension();
             
+            // Always use 'public' disk for both local and production (Render)
             $path = $image->storeAs('property_images', $filename, 'public');
             
             $imageRecord = new PropertyImage();

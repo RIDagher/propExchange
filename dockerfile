@@ -34,8 +34,12 @@ RUN composer install --no-dev --optimize-autoloader
 
 RUN chmod -R 755 public/css
 
-# Create the symbolic link for storage
+# Create the symbolic link for storage (for local development)
 RUN php artisan storage:link
+
+# Ensure storage directories exist and have correct permissions
+RUN mkdir -p storage/app/public/property_images \
+    && chmod -R 775 storage/app/public
 
 
 # Expose port 80

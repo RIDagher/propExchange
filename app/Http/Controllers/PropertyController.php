@@ -245,7 +245,7 @@ class PropertyController extends Controller {
 
     // get all properties for map
     public function mapView() {
-        $properties = Property::all();
+        $properties = Property::with('images')->get();
 
         return view('map-properties', [
             'properties' => $properties
